@@ -1,0 +1,12 @@
+{
+  "TestToken": {
+    "address": "0x5FbDB2315678afecb367f032d93F642f64180aa3",
+    "txHash": "0x8a592c9677a240c8ad343afd31d09d48f33c60c77017bb25f88e5a0f9b50196e",
+    "timestamp": "2025-05-05T08:08:33.762Z"
+  },
+  "LendingPoolUpgradeable": {
+    "proxyAddress": "0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0",
+    "implementationAddress": "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512",
+    "timestamp": "2025-05-05T08:08:33.762Z"
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "network": "sepolia",
+  "chainId": 11155111,
+  "contractAddress": "0x39b908E85Fca1cf6f3AB8dAfD11b674cAD7B0d7c",
+  "transactionHash": "0x1f5377c6ba349166af53515af3c316244ca4c451c423307cb28c4d23d0561695",
+  "tokenAddress": "0x8626f6940E2eb28930eFb4CeF49B2d1F2C9C1199",
+  "priceFeed": "0x694AA1769357215DE4FAC081bf1f309aDC325306",
+  "blockNumber": 8261832,
+  "gasUsed": 2985274,
+  "gasPrice": "10 gwei",
+  "timestamp": "2023-05-05T03:30:12.000Z",
+  "deployer": "0x0298Ca3825737625c075984F6f67c19f83976257"
+} 

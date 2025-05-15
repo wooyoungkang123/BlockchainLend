@@ -1,0 +1,9 @@
+{
+  "network": "sepolia",
+  "simpleStorageContract": {
+    "address": "0xacB9950a46c20C69c1079F384540FF9ae87312eF",
+    "transactionHash": "0x39565374997b182f38252c029965b903c5ce681215853030b7114b055f172d11"
+  },
+  "timestamp": "2025-05-12T05:04:14.288Z",
+  "chainId": 11155111
+}

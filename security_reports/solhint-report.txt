@@ -1,0 +1,271 @@
+A new version of Solhint is available: 5.1.0
+Please consider updating your Solhint package.
+
+contracts/CCIPReceiver.sol
+    4:1   warning  global import of path @openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol is not allowed. Specify names to import individually or bind all exports of the module into a name (import "path" as Name)           no-global-import
+    5:1   warning  global import of path @openzeppelin/contracts/token/ERC20/IERC20.sol is not allowed. Specify names to import individually or bind all exports of the module into a name (import "path" as Name)                    no-global-import
+    6:1   warning  global import of path @openzeppelin/contracts/security/ReentrancyGuard.sol is not allowed. Specify names to import individually or bind all exports of the module into a name (import "path" as Name)              no-global-import
+    7:1   warning  global import of path @openzeppelin/contracts/access/Ownable.sol is not allowed. Specify names to import individually or bind all exports of the module into a name (import "path" as Name)                        no-global-import
+    8:1   warning  global import of path @chainlink/contracts/src/v0.8/ccip/interfaces/IRouterClient.sol is not allowed. Specify names to import individually or bind all exports of the module into a name (import "path" as Name)   no-global-import
+    9:1   warning  global import of path @chainlink/contracts/src/v0.8/ccip/libraries/Client.sol is not allowed. Specify names to import individually or bind all exports of the module into a name (import "path" as Name)           no-global-import
+   10:1   warning  global import of path @chainlink/contracts/src/v0.8/ccip/applications/CCIPReceiver.sol is not allowed. Specify names to import individually or bind all exports of the module into a name (import "path" as Name)  no-global-import
+   50:9   warning  Error message for require is too long: 53 counted / 32 allowed                                                                                                                                                     reason-string
+   50:9   warning  GC: Use Custom Errors instead of require statements                                                                                                                                                                gas-custom-errors
+   60:9   warning  Error message for require is too long: 53 counted / 32 allowed                                                                                                                                                     reason-string
+   60:9   warning  GC: Use Custom Errors instead of require statements                                                                                                                                                                gas-custom-errors
+   70:9   warning  Error message for require is too long: 55 counted / 32 allowed                                                                                                                                                     reason-string
+   70:9   warning  GC: Use Custom Errors instead of require statements                                                                                                                                                                gas-custom-errors
+   89:9   warning  Error message for require is too long: 40 counted / 32 allowed                                                                                                                                                     reason-string
+   89:9   warning  GC: Use Custom Errors instead of require statements                                                                                                                                                                gas-custom-errors
+  137:9   warning  Variable "messageId" is unused                                                                                                                                                                                     no-unused-vars
+  158:5   warning  Function order is incorrect, external  function can not go after internal  function (line 136)                                                                                                                     ordering
+  162:9   warning  Variable "repaymentData" is unused                                                                                                                                                                                 no-unused-vars
+  164:9   warning  Error message for require is too long: 40 counted / 32 allowed                                                                                                                                                     reason-string
+  164:9   warning  GC: Use Custom Errors instead of require statements                                                                                                                                                                gas-custom-errors
+  172:28  warning  Avoid to use low level calls                                                                                                                                                                                       avoid-low-level-calls
+  177:9   warning  Error message for require is too long: 34 counted / 32 allowed                                                                                                                                                     reason-string
+  177:9   warning  GC: Use Custom Errors instead of require statements                                                                                                                                                                gas-custom-errors
+  196:9   warning  GC: Use Custom Errors instead of require statements                                                                                                                                                                gas-custom-errors
+  198:9   warning  GC: Use Custom Errors instead of require statements                                                                                                                                                                gas-custom-errors
+
+contracts/CCIPSenderExample.sol
+    4:1   warning  global import of path @openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol is not allowed. Specify names to import individually or bind all exports of the module into a name (import "path" as Name)          no-global-import
+    5:1   warning  global import of path @openzeppelin/contracts/token/ERC20/IERC20.sol is not allowed. Specify names to import individually or bind all exports of the module into a name (import "path" as Name)                   no-global-import
+    6:1   warning  global import of path @openzeppelin/contracts/access/Ownable.sol is not allowed. Specify names to import individually or bind all exports of the module into a name (import "path" as Name)                       no-global-import
+    7:1   warning  global import of path @chainlink/contracts/src/v0.8/ccip/interfaces/IRouterClient.sol is not allowed. Specify names to import individually or bind all exports of the module into a name (import "path" as Name)  no-global-import
+    8:1   warning  global import of path @chainlink/contracts/src/v0.8/ccip/libraries/Client.sol is not allowed. Specify names to import individually or bind all exports of the module into a name (import "path" as Name)          no-global-import
+   18:5   warning  Immutable variables name are set to be in capitalized SNAKE_CASE                                                                                                                                                  immutable-vars-naming
+   21:5   warning  Immutable variables name are set to be in capitalized SNAKE_CASE                                                                                                                                                  immutable-vars-naming
+   24:5   warning  Function order is incorrect, enum definition can not go after state variable declaration (line 21)                                                                                                                ordering
+   46:9   warning  Error message for require is too long: 48 counted / 32 allowed                                                                                                                                                    reason-string
+   46:9   warning  GC: Use Custom Errors instead of require statements                                                                                                                                                               gas-custom-errors
+   47:9   warning  Error message for require is too long: 52 counted / 32 allowed                                                                                                                                                    reason-string
+   47:9   warning  GC: Use Custom Errors instead of require statements                                                                                                                                                               gas-custom-errors
+   62:5   warning  Function body contains 60 lines but allowed no more than 50 lines                                                                                                                                                 function-max-lines
+  100:9   warning  Error message for require is too long: 44 counted / 32 allowed                                                                                                                                                    reason-string
+  100:9   warning  GC: Use Custom Errors instead of require statements                                                                                                                                                               gas-custom-errors
+  134:5   warning  Function body contains 64 lines but allowed no more than 50 lines                                                                                                                                                 function-max-lines
+  172:9   warning  Error message for require is too long: 53 counted / 32 allowed                                                                                                                                                    reason-string
+  172:9   warning  GC: Use Custom Errors instead of require statements                                                                                                                                                               gas-custom-errors
+  184:13  warning  Error message for require is too long: 50 counted / 32 allowed                                                                                                                                                    reason-string
+  184:13  warning  GC: Use Custom Errors instead of require statements                                                                                                                                                               gas-custom-errors
+  216:9   warning  Error message for require is too long: 50 counted / 32 allowed                                                                                                                                                    reason-string
+  216:9   warning  GC: Use Custom Errors instead of require statements                                                                                                                                                               gas-custom-errors
+
+contracts/core/LendingPool.sol
+   20:2   warning  Line length must be no more than 120 but current length is 121                                    max-line-length
+   29:9   warning  Error message for require is too long: 49 counted / 32 allowed                                    reason-string
+   29:9   warning  GC: Use Custom Errors instead of require statements                                               gas-custom-errors
+   30:9   warning  Error message for require is too long: 46 counted / 32 allowed                                    reason-string
+   30:9   warning  GC: Use Custom Errors instead of require statements                                               gas-custom-errors
+   34:34  warning  Avoid making time-based decisions in your business logic                                          not-rely-on-time
+   41:9   warning  Error message for require is too long: 50 counted / 32 allowed                                    reason-string
+   41:9   warning  GC: Use Custom Errors instead of require statements                                               gas-custom-errors
+   53:9   warning  Error message for require is too long: 51 counted / 32 allowed                                    reason-string
+   53:9   warning  GC: Use Custom Errors instead of require statements                                               gas-custom-errors
+   54:9   warning  Error message for require is too long: 33 counted / 32 allowed                                    reason-string
+   54:9   warning  GC: Use Custom Errors instead of require statements                                               gas-custom-errors
+   60:9   warning  Error message for require is too long: 51 counted / 32 allowed                                    reason-string
+   60:9   warning  GC: Use Custom Errors instead of require statements                                               gas-custom-errors
+   69:9   warning  GC: Use Custom Errors instead of require statements                                               gas-custom-errors
+   79:9   warning  Error message for require is too long: 49 counted / 32 allowed                                    reason-string
+   79:9   warning  GC: Use Custom Errors instead of require statements                                               gas-custom-errors
+   87:9   warning  Error message for require is too long: 36 counted / 32 allowed                                    reason-string
+   87:9   warning  GC: Use Custom Errors instead of require statements                                               gas-custom-errors
+   88:9   warning  Error message for require is too long: 48 counted / 32 allowed                                    reason-string
+   88:9   warning  GC: Use Custom Errors instead of require statements                                               gas-custom-errors
+   93:9   warning  Error message for require is too long: 34 counted / 32 allowed                                    reason-string
+   93:9   warning  GC: Use Custom Errors instead of require statements                                               gas-custom-errors
+  103:9   warning  Error message for require is too long: 48 counted / 32 allowed                                    reason-string
+  103:9   warning  GC: Use Custom Errors instead of require statements                                               gas-custom-errors
+  104:9   warning  Error message for require is too long: 34 counted / 32 allowed                                    reason-string
+  104:9   warning  GC: Use Custom Errors instead of require statements                                               gas-custom-errors
+  113:9   warning  Error message for require is too long: 34 counted / 32 allowed                                    reason-string
+  113:9   warning  GC: Use Custom Errors instead of require statements                                               gas-custom-errors
+  124:9   warning  Error message for require is too long: 44 counted / 32 allowed                                    reason-string
+  124:9   warning  GC: Use Custom Errors instead of require statements                                               gas-custom-errors
+  125:9   warning  Error message for require is too long: 54 counted / 32 allowed                                    reason-string
+  125:9   warning  GC: Use Custom Errors instead of require statements                                               gas-custom-errors
+  126:9   warning  Error message for require is too long: 33 counted / 32 allowed                                    reason-string
+  126:9   warning  GC: Use Custom Errors instead of require statements                                               gas-custom-errors
+  133:9   warning  Error message for require is too long: 38 counted / 32 allowed                                    reason-string
+  133:9   warning  GC: Use Custom Errors instead of require statements                                               gas-custom-errors
+  145:9   warning  Error message for require is too long: 49 counted / 32 allowed                                    reason-string
+  145:9   warning  GC: Use Custom Errors instead of require statements                                               gas-custom-errors
+  154:9   warning  Error message for require is too long: 34 counted / 32 allowed                                    reason-string
+  154:9   warning  GC: Use Custom Errors instead of require statements                                               gas-custom-errors
+  164:31  warning  Avoid making time-based decisions in your business logic                                          not-rely-on-time
+  167:38  warning  Avoid making time-based decisions in your business logic                                          not-rely-on-time
+  178:2   warning  Line length must be no more than 120 but current length is 137                                    max-line-length
+  178:5   warning  Function order is incorrect, external view function can not go after public  function (line 163)  ordering
+  217:9   warning  GC: Use Custom Errors instead of require statements                                               gas-custom-errors
+  237:9   warning  Error message for require is too long: 42 counted / 32 allowed                                    reason-string
+  237:9   warning  GC: Use Custom Errors instead of require statements                                               gas-custom-errors
+  240:9   warning  GC: Use Custom Errors instead of require statements                                               gas-custom-errors
+  243:9   warning  Error message for require is too long: 34 counted / 32 allowed                                    reason-string
+  243:9   warning  GC: Use Custom Errors instead of require statements                                               gas-custom-errors
+
+contracts/interfaces/ILendingPool.sol
+  22:5  warning  Function name must be in mixedCase                                                                        func-name-mixedcase
+  29:5  warning  Function order is incorrect, external payable function can not go after external view function (line 26)  ordering
+  37:2  warning  Line length must be no more than 120 but current length is 136                                            max-line-length
+
+contracts/LendingPool.sol
+    4:1   warning  global import of path @openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol is not allowed. Specify names to import individually or bind all exports of the module into a name (import "path" as Name)                    no-global-import
+    5:1   warning  global import of path @openzeppelin/contracts/token/ERC20/IERC20.sol is not allowed. Specify names to import individually or bind all exports of the module into a name (import "path" as Name)                             no-global-import
+    6:1   warning  global import of path @openzeppelin/contracts/security/ReentrancyGuard.sol is not allowed. Specify names to import individually or bind all exports of the module into a name (import "path" as Name)                       no-global-import
+    7:1   warning  global import of path @openzeppelin/contracts/access/Ownable.sol is not allowed. Specify names to import individually or bind all exports of the module into a name (import "path" as Name)                                 no-global-import
+    8:1   warning  global import of path @chainlink/contracts/src/v0.8/shared/interfaces/AggregatorV3Interface.sol is not allowed. Specify names to import individually or bind all exports of the module into a name (import "path" as Name)  no-global-import
+   18:5   warning  Immutable variables name are set to be in capitalized SNAKE_CASE                                                                                                                                                            immutable-vars-naming
+   21:5   warning  Immutable variables name are set to be in capitalized SNAKE_CASE                                                                                                                                                            immutable-vars-naming
+   52:2   warning  Line length must be no more than 120 but current length is 121                                                                                                                                                              max-line-length
+   60:9   warning  Error message for require is too long: 41 counted / 32 allowed                                                                                                                                                              reason-string
+   60:9   warning  GC: Use Custom Errors instead of require statements                                                                                                                                                                         gas-custom-errors
+   61:9   warning  Error message for require is too long: 46 counted / 32 allowed                                                                                                                                                              reason-string
+   61:9   warning  GC: Use Custom Errors instead of require statements                                                                                                                                                                         gas-custom-errors
+   76:17  warning  Error message for require is too long: 36 counted / 32 allowed                                                                                                                                                              reason-string
+   76:17  warning  GC: Use Custom Errors instead of require statements                                                                                                                                                                         gas-custom-errors
+   78:17  warning  Code contains empty blocks                                                                                                                                                                                                  no-empty-blocks
+   90:9   warning  Error message for require is too long: 49 counted / 32 allowed                                                                                                                                                              reason-string
+   90:9   warning  GC: Use Custom Errors instead of require statements                                                                                                                                                                         gas-custom-errors
+  123:5   warning  Function order is incorrect, external  function can not go after public view function (line 99)                                                                                                                             ordering
+  124:9   warning  Error message for require is too long: 53 counted / 32 allowed                                                                                                                                                              reason-string
+  124:9   warning  GC: Use Custom Errors instead of require statements                                                                                                                                                                         gas-custom-errors
+  143:9   warning  Error message for require is too long: 54 counted / 32 allowed                                                                                                                                                              reason-string
+  143:9   warning  GC: Use Custom Errors instead of require statements                                                                                                                                                                         gas-custom-errors
+  144:9   warning  Error message for require is too long: 41 counted / 32 allowed                                                                                                                                                              reason-string
+  144:9   warning  GC: Use Custom Errors instead of require statements                                                                                                                                                                         gas-custom-errors
+  145:9   warning  Error message for require is too long: 35 counted / 32 allowed                                                                                                                                                              reason-string
+  145:9   warning  GC: Use Custom Errors instead of require statements                                                                                                                                                                         gas-custom-errors
+  151:13  warning  Error message for require is too long: 50 counted / 32 allowed                                                                                                                                                              reason-string
+  151:13  warning  GC: Use Custom Errors instead of require statements                                                                                                                                                                         gas-custom-errors
+  171:9   warning  Error message for require is too long: 52 counted / 32 allowed                                                                                                                                                              reason-string
+  171:9   warning  GC: Use Custom Errors instead of require statements                                                                                                                                                                         gas-custom-errors
+  172:9   warning  Error message for require is too long: 35 counted / 32 allowed                                                                                                                                                              reason-string
+  172:9   warning  GC: Use Custom Errors instead of require statements                                                                                                                                                                         gas-custom-errors
+  177:9   warning  Error message for require is too long: 36 counted / 32 allowed                                                                                                                                                              reason-string
+  177:9   warning  GC: Use Custom Errors instead of require statements                                                                                                                                                                         gas-custom-errors
+  196:9   warning  Error message for require is too long: 51 counted / 32 allowed                                                                                                                                                              reason-string
+  196:9   warning  GC: Use Custom Errors instead of require statements                                                                                                                                                                         gas-custom-errors
+  197:9   warning  Error message for require is too long: 34 counted / 32 allowed                                                                                                                                                              reason-string
+  197:9   warning  GC: Use Custom Errors instead of require statements                                                                                                                                                                         gas-custom-errors
+  222:9   warning  Error message for require is too long: 51 counted / 32 allowed                                                                                                                                                              reason-string
+  222:9   warning  GC: Use Custom Errors instead of require statements                                                                                                                                                                         gas-custom-errors
+  223:9   warning  Error message for require is too long: 51 counted / 32 allowed                                                                                                                                                              reason-string
+  223:9   warning  GC: Use Custom Errors instead of require statements                                                                                                                                                                         gas-custom-errors
+  224:9   warning  Error message for require is too long: 44 counted / 32 allowed                                                                                                                                                              reason-string
+  224:9   warning  GC: Use Custom Errors instead of require statements                                                                                                                                                                         gas-custom-errors
+  225:9   warning  Error message for require is too long: 34 counted / 32 allowed                                                                                                                                                              reason-string
+  225:9   warning  GC: Use Custom Errors instead of require statements                                                                                                                                                                         gas-custom-errors
+  249:9   warning  Error message for require is too long: 44 counted / 32 allowed                                                                                                                                                              reason-string
+  249:9   warning  GC: Use Custom Errors instead of require statements                                                                                                                                                                         gas-custom-errors
+  250:9   warning  Error message for require is too long: 34 counted / 32 allowed                                                                                                                                                              reason-string
+  250:9   warning  GC: Use Custom Errors instead of require statements                                                                                                                                                                         gas-custom-errors
+  254:9   warning  Error message for require is too long: 48 counted / 32 allowed                                                                                                                                                              reason-string
+  254:9   warning  GC: Use Custom Errors instead of require statements                                                                                                                                                                         gas-custom-errors
+  280:9   warning  Error message for require is too long: 44 counted / 32 allowed                                                                                                                                                              reason-string
+  280:9   warning  GC: Use Custom Errors instead of require statements                                                                                                                                                                         gas-custom-errors
+
+contracts/LendingPoolUpgradeable.sol
+    4:1   warning  global import of path @openzeppelin/contracts-upgradeable/token/ERC20/utils/SafeERC20Upgradeable.sol is not allowed. Specify names to import individually or bind all exports of the module into a name (import "path" as Name)  no-global-import
+    5:1   warning  global import of path @openzeppelin/contracts-upgradeable/token/ERC20/IERC20Upgradeable.sol is not allowed. Specify names to import individually or bind all exports of the module into a name (import "path" as Name)           no-global-import
+    6:1   warning  global import of path @openzeppelin/contracts-upgradeable/security/ReentrancyGuardUpgradeable.sol is not allowed. Specify names to import individually or bind all exports of the module into a name (import "path" as Name)     no-global-import
+    7:1   warning  global import of path @openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol is not allowed. Specify names to import individually or bind all exports of the module into a name (import "path" as Name)               no-global-import
+    8:1   warning  global import of path @openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol is not allowed. Specify names to import individually or bind all exports of the module into a name (import "path" as Name)               no-global-import
+    9:1   warning  global import of path @openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol is not allowed. Specify names to import individually or bind all exports of the module into a name (import "path" as Name)             no-global-import
+   58:9   warning  Error message for require is too long: 52 counted / 32 allowed                                                                                                                                                                   reason-string
+   58:9   warning  GC: Use Custom Errors instead of require statements                                                                                                                                                                              gas-custom-errors
+   74:9   warning  Error message for require is too long: 64 counted / 32 allowed                                                                                                                                                                   reason-string
+   74:9   warning  GC: Use Custom Errors instead of require statements                                                                                                                                                                              gas-custom-errors
+   93:9   warning  Error message for require is too long: 65 counted / 32 allowed                                                                                                                                                                   reason-string
+   93:9   warning  GC: Use Custom Errors instead of require statements                                                                                                                                                                              gas-custom-errors
+   94:9   warning  Error message for require is too long: 52 counted / 32 allowed                                                                                                                                                                   reason-string
+   94:9   warning  GC: Use Custom Errors instead of require statements                                                                                                                                                                              gas-custom-errors
+   95:9   warning  Error message for require is too long: 46 counted / 32 allowed                                                                                                                                                                   reason-string
+   95:9   warning  GC: Use Custom Errors instead of require statements                                                                                                                                                                              gas-custom-errors
+  114:9   warning  Error message for require is too long: 63 counted / 32 allowed                                                                                                                                                                   reason-string
+  114:9   warning  GC: Use Custom Errors instead of require statements                                                                                                                                                                              gas-custom-errors
+  115:9   warning  Error message for require is too long: 46 counted / 32 allowed                                                                                                                                                                   reason-string
+  115:9   warning  GC: Use Custom Errors instead of require statements                                                                                                                                                                              gas-custom-errors
+  118:9   warning  Error message for require is too long: 47 counted / 32 allowed                                                                                                                                                                   reason-string
+  118:9   warning  GC: Use Custom Errors instead of require statements                                                                                                                                                                              gas-custom-errors
+  137:9   warning  Error message for require is too long: 62 counted / 32 allowed                                                                                                                                                                   reason-string
+  137:9   warning  GC: Use Custom Errors instead of require statements                                                                                                                                                                              gas-custom-errors
+  138:9   warning  Error message for require is too long: 45 counted / 32 allowed                                                                                                                                                                   reason-string
+  138:9   warning  GC: Use Custom Errors instead of require statements                                                                                                                                                                              gas-custom-errors
+  162:9   warning  Error message for require is too long: 55 counted / 32 allowed                                                                                                                                                                   reason-string
+  162:9   warning  GC: Use Custom Errors instead of require statements                                                                                                                                                                              gas-custom-errors
+  182:5   warning  Function order is incorrect, external view function can not go after public view function (line 171)                                                                                                                             ordering
+  204:87  warning  Code contains empty blocks                                                                                                                                                                                                       no-empty-blocks
+
+contracts/Lock.sol
+   8:5   warning  Rule is set with explicit type [var/s: uint]                    explicit-types
+  11:22  warning  Rule is set with explicit type [var/s: uint]                    explicit-types
+  11:35  warning  Rule is set with explicit type [var/s: uint]                    explicit-types
+  13:17  warning  Rule is set with explicit type [var/s: uint]                    explicit-types
+  14:9   warning  Error message for require is too long: 35 counted / 32 allowed  reason-string
+  14:9   warning  GC: Use Custom Errors instead of require statements             gas-custom-errors
+  15:13  warning  Avoid making time-based decisions in your business logic        not-rely-on-time
+  27:9   warning  GC: Use Custom Errors instead of require statements             gas-custom-errors
+  27:17  warning  Avoid making time-based decisions in your business logic        not-rely-on-time
+  28:9   warning  GC: Use Custom Errors instead of require statements             gas-custom-errors
+  30:48  warning  Avoid making time-based decisions in your business logic        not-rely-on-time
+
+contracts/mocks/MockPriceFeed.sol
+  27:22  warning  Avoid making time-based decisions in your business logic  not-rely-on-time
+  33:22  warning  Avoid making time-based decisions in your business logic  not-rely-on-time
+  57:9   warning  GC: Use Custom Errors instead of require statements       gas-custom-errors
+
+contracts/ReputationOracle.sol
+    4:1   warning  global import of path @openzeppelin/contracts/access/Ownable.sol is not allowed. Specify names to import individually or bind all exports of the module into a name (import "path" as Name)  no-global-import
+   46:5   warning  Function order is incorrect, modifier definition can not go after constructor/initializer (line 41)                                                                                          ordering
+   47:9   warning  Error message for require is too long: 52 counted / 32 allowed                                                                                                                               reason-string
+   47:9   warning  GC: Use Custom Errors instead of require statements                                                                                                                                          gas-custom-errors
+   63:9   warning  Error message for require is too long: 47 counted / 32 allowed                                                                                                                               reason-string
+   63:9   warning  GC: Use Custom Errors instead of require statements                                                                                                                                          gas-custom-errors
+   64:9   warning  Error message for require is too long: 43 counted / 32 allowed                                                                                                                               reason-string
+   64:9   warning  GC: Use Custom Errors instead of require statements                                                                                                                                          gas-custom-errors
+   75:9   warning  Error message for require is too long: 39 counted / 32 allowed                                                                                                                               reason-string
+   75:9   warning  GC: Use Custom Errors instead of require statements                                                                                                                                          gas-custom-errors
+   76:9   warning  Error message for require is too long: 47 counted / 32 allowed                                                                                                                               reason-string
+   76:9   warning  GC: Use Custom Errors instead of require statements                                                                                                                                          gas-custom-errors
+   88:9   warning  Error message for require is too long: 49 counted / 32 allowed                                                                                                                               reason-string
+   88:9   warning  GC: Use Custom Errors instead of require statements                                                                                                                                          gas-custom-errors
+   91:39  warning  Avoid making time-based decisions in your business logic                                                                                                                                     not-rely-on-time
+   93:50  warning  Avoid making time-based decisions in your business logic                                                                                                                                     not-rely-on-time
+  105:9   warning  Error message for require is too long: 40 counted / 32 allowed                                                                                                                               reason-string
+  105:9   warning  GC: Use Custom Errors instead of require statements                                                                                                                                          gas-custom-errors
+  111:13  warning  Error message for require is too long: 49 counted / 32 allowed                                                                                                                               reason-string
+  111:13  warning  GC: Use Custom Errors instead of require statements                                                                                                                                          gas-custom-errors
+  114:47  warning  Avoid making time-based decisions in your business logic                                                                                                                                     not-rely-on-time
+  116:62  warning  Avoid making time-based decisions in your business logic                                                                                                                                     not-rely-on-time
+  126:9   warning  Error message for require is too long: 45 counted / 32 allowed                                                                                                                               reason-string
+  126:9   warning  GC: Use Custom Errors instead of require statements                                                                                                                                          gas-custom-errors
+  127:9   warning  Error message for require is too long: 49 counted / 32 allowed                                                                                                                               reason-string
+  127:9   warning  GC: Use Custom Errors instead of require statements                                                                                                                                          gas-custom-errors
+  128:9   warning  Error message for require is too long: 40 counted / 32 allowed                                                                                                                               reason-string
+  128:9   warning  GC: Use Custom Errors instead of require statements                                                                                                                                          gas-custom-errors
+  129:9   warning  Error message for require is too long: 48 counted / 32 allowed                                                                                                                               reason-string
+  129:9   warning  GC: Use Custom Errors instead of require statements                                                                                                                                          gas-custom-errors
+  142:9   warning  Error message for require is too long: 49 counted / 32 allowed                                                                                                                               reason-string
+  142:9   warning  GC: Use Custom Errors instead of require statements                                                                                                                                          gas-custom-errors
+  143:9   warning  Error message for require is too long: 40 counted / 32 allowed                                                                                                                               reason-string
+  143:9   warning  GC: Use Custom Errors instead of require statements                                                                                                                                          gas-custom-errors
+  144:9   warning  Error message for require is too long: 48 counted / 32 allowed                                                                                                                               reason-string
+  144:9   warning  GC: Use Custom Errors instead of require statements                                                                                                                                          gas-custom-errors
+  158:9   warning  Error message for require is too long: 42 counted / 32 allowed                                                                                                                               reason-string
+  158:9   warning  GC: Use Custom Errors instead of require statements                                                                                                                                          gas-custom-errors
+  171:9   warning  Error message for require is too long: 42 counted / 32 allowed                                                                                                                               reason-string
+  171:9   warning  GC: Use Custom Errors instead of require statements                                                                                                                                          gas-custom-errors
+
+contracts/TestToken.sol
+   4:1  warning  global import of path @openzeppelin/contracts/token/ERC20/ERC20.sol is not allowed. Specify names to import individually or bind all exports of the module into a name (import "path" as Name)  no-global-import
+   5:1  warning  global import of path @openzeppelin/contracts/access/Ownable.sol is not allowed. Specify names to import individually or bind all exports of the module into a name (import "path" as Name)     no-global-import
+  38:9  warning  GC: Use Custom Errors instead of require statements                                                                                                                                             gas-custom-errors
+
+✖ 242 problems (0 errors, 242 warnings)
+
+ -------------------------------------------------------------------------- 
+ ===> Join SOLHINT Community at: https://discord.com/invite/4TYGq3zpjs <=== 
+ -------------------------------------------------------------------------- 
+

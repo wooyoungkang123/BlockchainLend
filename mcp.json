@@ -1,0 +1,86 @@
+{
+  "tools": [
+    {
+      "name": "hardhat-compile",
+      "description": "Compile Solidity contracts using Hardhat",
+      "command": "npx hardhat compile",
+      "parameters": {}
+    },
+    {
+      "name": "hardhat-test",
+      "description": "Run tests on Solidity contracts using Hardhat",
+      "command": "npx hardhat test {test}",
+      "parameters": {
+        "test": {
+          "type": "string",
+          "description": "Specific test file to run",
+          "required": false
+        }
+      }
+    },
+    {
+      "name": "foundry-test",
+      "description": "Run tests using Foundry",
+      "command": "forge test {verbosity} {test}",
+      "parameters": {
+        "verbosity": {
+          "type": "string",
+          "description": "Verbosity level (e.g., -vvv)",
+          "required": false
+        },
+        "test": {
+          "type": "string",
+          "description": "Specific test to run",
+          "required": false
+        }
+      }
+    },
+    {
+      "name": "foundry-invariant",
+      "description": "Run invariant tests using Foundry",
+      "command": "forge test --match-path test/invariant/**/*.sol {verbosity}",
+      "parameters": {
+        "verbosity": {
+          "type": "string",
+          "description": "Verbosity level (e.g., -vvv)",
+          "required": false
+        }
+      }
+    },
+    {
+      "name": "hardhat-deploy",
+      "description": "Deploy contracts using Hardhat",
+      "command": "npx hardhat run scripts/{script} --network {network}",
+      "parameters": {
+        "script": {
+          "type": "string",
+          "description": "Deployment script to run",
+          "required": true
+        },
+        "network": {
+          "type": "string",
+          "description": "Network to deploy to",
+          "required": true
+        }
+      }
+    },
+    {
+      "name": "wallet-server",
+      "description": "Start wallet server for Ethers.js integration",
+      "command": "node scripts/wallet-server.js",
+      "parameters": {}
+    },
+    {
+      "name": "static-analysis",
+      "description": "Run static analysis tools on the contracts",
+      "command": "./scripts/run_static_analysis.sh",
+      "parameters": {}
+    },
+    {
+      "name": "generate-key",
+      "description": "Generate a new Ethereum private key",
+      "command": "node scripts/generate-key.js",
+      "parameters": {}
+    }
+  ]
+} 

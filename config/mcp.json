@@ -1,0 +1,28 @@
+{
+  "name": "ethereum-dev",
+  "version": "1.0.0",
+  "description": "Ethereum development tools for Cursor",
+  "tools": [
+    {
+      "name": "hardhat-wrapper",
+      "description": "Hardhat wrapper for compiling, testing, and deploying smart contracts",
+      "command": "npx hardhat",
+      "args": ["${args}"],
+      "cwd": "${workspaceRoot}"
+    },
+    {
+      "name": "hardhat-node",
+      "description": "Start a local Hardhat network with pre-funded accounts",
+      "command": "npx hardhat",
+      "args": ["node"],
+      "cwd": "${workspaceRoot}"
+    },
+    {
+      "name": "ethers-wallet",
+      "description": "Ethers.js wallet server for transaction signing and deployment",
+      "command": "node",
+      "args": ["${workspaceRoot}/scripts/wallet-server.js", "${args}"],
+      "cwd": "${workspaceRoot}"
+    }
+  ]
+} 
