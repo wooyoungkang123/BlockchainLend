@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LendFlow - DeFi Lending Platform</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    }
+    .health-indicator {
+      width: 100%;
+      height: 8px;
+      background-color: #f0f0f0;
+      border-radius: 4px;
+      overflow: hidden;
+    }
+    .health-indicator-bar {
+      height: 100%;
+      border-radius: 4px;
+    }
+    .demo-badge {
+      background-color: #e0f2fe;
+      color: #0369a1;
+      padding: 4px 8px;
+      border-radius: 9999px;
+      font-size: 12px;
+      font-weight: 500;
+    }
+  </style>
+</head>
+<body class="bg-gray-100 min-h-screen">
+  <header class="bg-white shadow-md p-4">
+    <div class="container mx-auto flex justify-between items-center">
+      <h1 class="text-2xl font-bold text-blue-600">LendFlow</h1>
+      <div class="flex items-center space-x-4">
+        <span class="demo-badge">Demo Mode</span>
+        <button class="bg-blue-600 text-white px-4 py-2 rounded-lg">Connect Wallet</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="container mx-auto p-6">
+    <section class="mb-8">
+      <h2 class="text-xl font-semibold mb-4">Your Dashboard</h2>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div class="bg-white p-4 rounded-lg shadow">
+          <h3 class="text-gray-500 text-sm">Collateral Supplied</h3>
+          <p class="text-2xl font-bold">5.0 ETH</p>
+          <p class="text-sm text-green-600">+4.5% APY</p>
+        </div>
+        <div class="bg-white p-4 rounded-lg shadow">
+          <h3 class="text-gray-500 text-sm">Borrowed Amount</h3>
+          <p class="text-2xl font-bold">2000 USDC</p>
+          <p class="text-sm text-red-600">-7.8% APY</p>
+        </div>
+        <div class="bg-white p-4 rounded-lg shadow">
+          <h3 class="text-gray-500 text-sm">Health Factor</h3>
+          <p class="text-2xl font-bold">1.8</p>
+          <div class="health-indicator mt-2">
+            <div class="health-indicator-bar bg-green-500" style="width: 60%"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+    
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <section class="bg-white p-6 rounded-lg shadow">
+        <h2 class="text-xl font-semibold mb-4">Supply</h2>
+        <div class="mb-4">
+          <label class="block text-gray-700 mb-2">Asset</label>
+          <select class="w-full p-2 border rounded">
+            <option>ETH</option>
+          </select>
+        </div>
+        <div class="mb-4">
+          <label class="block text-gray-700 mb-2">Amount</label>
+          <input type="text" class="w-full p-2 border rounded" placeholder="0.0">
+          <div class="flex justify-between mt-1">
+            <span class="text-sm text-gray-500">Available: 10 ETH</span>
+            <button class="text-sm text-blue-600">MAX</button>
+          </div>
+        </div>
+        <button class="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition">Supply ETH</button>
+      </section>
+      
+      <section class="bg-white p-6 rounded-lg shadow">
+        <h2 class="text-xl font-semibold mb-4">Borrow</h2>
+        <div class="mb-4">
+          <label class="block text-gray-700 mb-2">Asset</label>
+          <select class="w-full p-2 border rounded">
+            <option>USDC</option>
+          </select>
+        </div>
+        <div class="mb-4">
+          <label class="block text-gray-700 mb-2">Amount</label>
+          <input type="text" class="w-full p-2 border rounded" placeholder="0.0">
+          <div class="flex justify-between mt-1">
+            <span class="text-sm text-gray-500">Available: 3000 USDC</span>
+            <button class="text-sm text-blue-600">MAX</button>
+          </div>
+        </div>
+        <button class="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition">Borrow USDC</button>
+      </section>
+    </div>
+    
+    <section class="mt-8 bg-white p-6 rounded-lg shadow">
+      <h2 class="text-xl font-semibold mb-4">Market Overview</h2>
+      <div class="overflow-x-auto">
+        <table class="w-full">
+          <thead>
+            <tr class="border-b">
+              <th class="text-left p-2">Asset</th>
+              <th class="text-right p-2">Market Size</th>
+              <th class="text-right p-2">Deposit APY</th>
+              <th class="text-right p-2">Borrow APY</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="border-b">
+              <td class="p-2 flex items-center">
+                <div class="w-8 h-8 bg-blue-500 rounded-full mr-2"></div>
+                ETH
+              </td>
+              <td class="text-right p-2">$1,000,000</td>
+              <td class="text-right p-2 text-green-600">4.5%</td>
+              <td class="text-right p-2 text-red-600">7.8%</td>
+            </tr>
+            <tr>
+              <td class="p-2 flex items-center">
+                <div class="w-8 h-8 bg-green-500 rounded-full mr-2"></div>
+                USDC
+              </td>
+              <td class="text-right p-2">$750,000</td>
+              <td class="text-right p-2 text-green-600">3.2%</td>
+              <td class="text-right p-2 text-red-600">5.5%</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+  
+  <footer class="bg-white border-t mt-12 py-6">
+    <div class="container mx-auto text-center text-gray-500">
+      <p>Demo Version of LendFlow DeFi Platform</p>
+      <p class="text-sm mt-2">Deployed on GitHub Pages. <a href="https://github.com/wooyoungkang123/LendFlow" class="text-blue-600">View Source</a></p>
+    </div>
+  </footer>
+</body>
+</html> 
