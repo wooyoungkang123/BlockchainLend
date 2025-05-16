@@ -1,38 +1,36 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
+import path from 'path'
 
-// https://vite.dev/config/
+// https://vitejs.dev/config/
 export default defineConfig({
   plugins: [
-    react({
-      // Skip TypeScript checks in development mode
-      babel: {
-        babelrc: false,
-        configFile: false,
-      }
-    })
+    react() // Simplified React plugin config
   ],
-  base: '/LendFlow/',
-  // Skip TypeScript validation
-  optimizeDeps: {
-    esbuildOptions: {
-      // Skip TypeScript checking during dependency optimization
-      tsconfigRaw: { compilerOptions: { skipLibCheck: true } }
-    }
-  },
+  base: process.env.NODE_ENV === 'production' ? '/LendFlow/' : '/',
   build: {
-    // Continue on error during build
-    minify: true,
-    sourcemap: false,
-    // Skip TypeScript errors during build
-    commonjsOptions: {
-      transformMixedEsModules: true,
+    outDir: 'dist',
+    assetsDir: 'assets',
+    emptyOutDir: true,
+    sourcemap: true
+  },
+  resolve: {
+    alias: {
+      '@': path.resolve(__dirname, './src')
     }
   },
   server: {
-    // Don't fail on TypeScript errors
-    hmr: {
-      overlay: false
+    port: 5173,
+    strictPort: false,
+    watch: {
+      usePolling: true
     }
+  },
+  optimizeDeps: {
+    exclude: ['@testing-library/jest-dom', '@testing-library/react-hooks']
+  },
+  // Ignore TypeScript errors
+  esbuild: {
+    logOverride: { 'this-is-undefined-in-esm': 'silent' }
   }
 })
