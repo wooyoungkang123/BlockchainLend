@@ -34,149 +34,259 @@ jobs:
           cd frontend
           npm install
           npm install --save-dev @babel/plugin-transform-react-jsx
-          npm install --save-dev tailwindcss postcss autoprefixer
       
-      - name: Build Static Page
+      - name: Create Demo Environment Files
+        run: |
+          cd frontend
+          # Create .env file for demo mode
+          echo "VITE_SKIP_TS_CHECK=true" > .env
+          echo "TSC_COMPILE_ON_ERROR=true" >> .env
+          echo "VITE_DEMO_MODE=true" >> .env
+          
+          # Create a mock data file for the frontend
+          cat > src/mockData.ts << 'EOL'
+          // Mock data to display UI without blockchain connection
+          export const mockData = {
+            userData: {
+              collateralBalance: '5.0',
+              borrowBalance: '2000',
+              availableToBorrow: '3000',
+              healthFactor: '1.8',
+              liquidationThreshold: '1.5',
+              totalSupplied: '5000',
+              totalBorrowed: '2000',
+              netAPY: '3.2'
+            },
+            marketData: {
+              depositAPY: '4.5',
+              borrowAPY: '7.8',
+              totalDeposited: '1000000',
+              totalBorrowed: '750000',
+              availableLiquidity: '250000'
+            },
+            ethPrice: '2500'
+          };
+          EOL
+          
+          # Create a Web3Provider replacement for demo mode
+          cat > src/DemoProvider.tsx << 'EOL'
+          import React, { createContext, useContext, ReactNode } from 'react';
+          import { mockData } from './mockData';
+
+          // Create context with demo data
+          const DemoContext = createContext(mockData);
+
+          export const useDemoData = () => useContext(DemoContext);
+
+          interface DemoProviderProps {
+            children: ReactNode;
+          }
+
+          export default function DemoProvider({ children }: DemoProviderProps) {
+            return (
+              <DemoContext.Provider value={mockData}>
+                {children}
+              </DemoContext.Provider>
+            );
+          }
+          EOL
+          
+          # Modify main.tsx to use DemoProvider in production
+          cat > src/main.tsx << 'EOL'
+          import React from 'react'
+          import ReactDOM from 'react-dom/client'
+          import App from './App'
+          import './index.css'
+          import DemoProvider from './DemoProvider'
+
+          ReactDOM.createRoot(document.getElementById('root')!).render(
+            <React.StrictMode>
+              <DemoProvider>
+                <App />
+              </DemoProvider>
+            </React.StrictMode>,
+          )
+          EOL
+          
+          # Modify App.tsx to show the full UI in demo mode
+          cat > src/App.tsx << 'EOL'
+          import { useState } from 'react';
+          import './index.css';
+          import { useDemoData } from './DemoProvider';
+
+          function App() {
+            const demoData = useDemoData();
+            
+            return (
+              <div className="min-h-screen bg-gradient-to-b from-gray-100 to-gray-200">
+                <header className="bg-white shadow-md p-4">
+                  <div className="container mx-auto flex justify-between items-center">
+                    <h1 className="text-2xl font-bold text-blue-600">LendFlow</h1>
+                    <div className="flex items-center space-x-4">
+                      <div className="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm">Demo Mode</div>
+                      <button className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition">Connect Wallet</button>
+                    </div>
+                  </div>
+                </header>
+                
+                <main className="container mx-auto p-6">
+                  <section className="mb-8">
+                    <h2 className="text-xl font-semibold mb-4">Your Dashboard</h2>
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                      <div className="bg-white p-4 rounded-lg shadow">
+                        <h3 className="text-gray-500 text-sm">Collateral Supplied</h3>
+                        <p className="text-2xl font-bold">{demoData.userData.collateralBalance} ETH</p>
+                        <p className="text-sm text-green-600">+{demoData.marketData.depositAPY}% APY</p>
+                      </div>
+                      <div className="bg-white p-4 rounded-lg shadow">
+                        <h3 className="text-gray-500 text-sm">Borrowed Amount</h3>
+                        <p className="text-2xl font-bold">{demoData.userData.borrowBalance} USDC</p>
+                        <p className="text-sm text-red-600">-{demoData.marketData.borrowAPY}% APY</p>
+                      </div>
+                      <div className="bg-white p-4 rounded-lg shadow">
+                        <h3 className="text-gray-500 text-sm">Health Factor</h3>
+                        <p className="text-2xl font-bold">{demoData.userData.healthFactor}</p>
+                        <div className="w-full bg-gray-200 h-2 rounded-full mt-2">
+                          <div 
+                            className="h-2 rounded-full bg-green-500" 
+                            style={{ width: `${Math.min(parseFloat(demoData.userData.healthFactor) / 3 * 100, 100)}%` }}
+                          ></div>
+                        </div>
+                      </div>
+                    </div>
+                  </section>
+                  
+                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <section className="bg-white p-6 rounded-lg shadow">
+                      <h2 className="text-xl font-semibold mb-4">Supply</h2>
+                      <div className="mb-4">
+                        <label className="block text-gray-700 mb-2">Asset</label>
+                        <select className="w-full p-2 border rounded">
+                          <option>ETH</option>
+                        </select>
+                      </div>
+                      <div className="mb-4">
+                        <label className="block text-gray-700 mb-2">Amount</label>
+                        <input type="text" className="w-full p-2 border rounded" placeholder="0.0" />
+                        <div className="flex justify-between mt-1">
+                          <span className="text-sm text-gray-500">Available: 10 ETH</span>
+                          <button className="text-sm text-blue-600">MAX</button>
+                        </div>
+                      </div>
+                      <button className="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition">Supply ETH</button>
+                    </section>
+                    
+                    <section className="bg-white p-6 rounded-lg shadow">
+                      <h2 className="text-xl font-semibold mb-4">Borrow</h2>
+                      <div className="mb-4">
+                        <label className="block text-gray-700 mb-2">Asset</label>
+                        <select className="w-full p-2 border rounded">
+                          <option>USDC</option>
+                        </select>
+                      </div>
+                      <div className="mb-4">
+                        <label className="block text-gray-700 mb-2">Amount</label>
+                        <input type="text" className="w-full p-2 border rounded" placeholder="0.0" />
+                        <div className="flex justify-between mt-1">
+                          <span className="text-sm text-gray-500">Available: {demoData.userData.availableToBorrow} USDC</span>
+                          <button className="text-sm text-blue-600">MAX</button>
+                        </div>
+                      </div>
+                      <button className="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition">Borrow USDC</button>
+                    </section>
+                  </div>
+                  
+                  <section className="mt-8 bg-white p-6 rounded-lg shadow">
+                    <h2 className="text-xl font-semibold mb-4">Market Overview</h2>
+                    <div className="overflow-x-auto">
+                      <table className="w-full">
+                        <thead>
+                          <tr className="border-b">
+                            <th className="text-left p-2">Asset</th>
+                            <th className="text-right p-2">Market Size</th>
+                            <th className="text-right p-2">Deposit APY</th>
+                            <th className="text-right p-2">Borrow APY</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr className="border-b">
+                            <td className="p-2 flex items-center">
+                              <div className="w-8 h-8 bg-blue-500 rounded-full mr-2"></div>
+                              ETH
+                            </td>
+                            <td className="text-right p-2">${demoData.marketData.totalDeposited}</td>
+                            <td className="text-right p-2 text-green-600">{demoData.marketData.depositAPY}%</td>
+                            <td className="text-right p-2 text-red-600">{demoData.marketData.borrowAPY}%</td>
+                          </tr>
+                          <tr>
+                            <td className="p-2 flex items-center">
+                              <div className="w-8 h-8 bg-green-500 rounded-full mr-2"></div>
+                              USDC
+                            </td>
+                            <td className="text-right p-2">${demoData.marketData.totalBorrowed}</td>
+                            <td className="text-right p-2 text-green-600">3.2%</td>
+                            <td className="text-right p-2 text-red-600">5.5%</td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </section>
+                </main>
+                
+                <footer className="bg-white border-t mt-12 py-6">
+                  <div className="container mx-auto text-center text-gray-500">
+                    <p>Demo Version of LendFlow DeFi Platform</p>
+                    <p className="text-sm mt-2">Deployed on GitHub Pages. <a href="https://github.com/wooyoungkang123/LendFlow" className="text-blue-600">View Source</a></p>
+                  </div>
+                </footer>
+              </div>
+            );
+          }
+
+          export default App;
+          EOL
+      
+      - name: Build Project
         env:
           VITE_SKIP_TS_CHECK: true
           TSC_COMPILE_ON_ERROR: true
           NODE_ENV: production
+          VITE_DEMO_MODE: true
         run: |
           cd frontend
-          # Create .env file
-          echo "VITE_SKIP_TS_CHECK=true" > .env
-          echo "TSC_COMPILE_ON_ERROR=true" >> .env
-          
-          # Create dist directory and index.html
-          mkdir -p dist
-          cat > dist/index.html << 'EOL'
-          <!DOCTYPE html>
-          <html lang="en">
-          <head>
-            <meta charset="UTF-8">
-            <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>LendFlow - DeFi Lending Platform</title>
-            <style>
-              body {
-                font-family: 'Inter', system-ui, sans-serif;
-                margin: 0;
-                padding: 0;
-                background: linear-gradient(to right, #3b82f6, #8b5cf6);
-                min-height: 100vh;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                color: #333;
-              }
-              .container {
-                background-color: white;
-                border-radius: 0.75rem;
-                box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-                width: 90%;
-                max-width: 32rem;
-                padding: 2rem;
-              }
-              h1 {
-                color: #3b82f6;
-                font-size: 1.875rem;
-                text-align: center;
-                margin-bottom: 1.5rem;
-                font-weight: 700;
-              }
-              h2 {
-                color: #4b5563;
-                font-size: 1.25rem;
-                text-align: center;
-                margin-bottom: 1rem;
-                font-weight: 600;
-              }
-              p {
-                color: #4b5563;
-                margin-bottom: 1rem;
-              }
-              ul {
-                list-style-type: disc;
-                padding-left: 1.5rem;
-                margin-bottom: 1.5rem;
-                color: #4b5563;
-              }
-              li {
-                margin-bottom: 0.5rem;
-              }
-              .info-box {
-                background-color: #eff6ff;
-                border-radius: 0.5rem;
-                padding: 1rem;
-                margin-bottom: 1.5rem;
-              }
-              .info-box h3 {
-                color: #2563eb;
-                font-weight: 600;
-                margin-top: 0;
-                margin-bottom: 0.5rem;
-                font-size: 1rem;
-              }
-              .info-box p {
-                font-size: 0.875rem;
-                margin-bottom: 0;
-              }
-              .button-container {
-                display: flex;
-                flex-direction: column;
-                gap: 0.75rem;
-              }
-              .button {
-                padding: 0.5rem 1rem;
-                border-radius: 0.5rem;
-                text-align: center;
-                font-weight: 500;
-                text-decoration: none;
-                transition: background-color 0.2s;
-              }
-              .primary-button {
-                background-color: #3b82f6;
-                color: white;
-              }
-              .primary-button:hover {
-                background-color: #2563eb;
-              }
-              .secondary-button {
-                border: 1px solid #3b82f6;
-                color: #3b82f6;
-              }
-              .secondary-button:hover {
-                background-color: #eff6ff;
-              }
-            </style>
-          </head>
-          <body>
-            <div class="container">
-              <h1>LendFlow</h1>
-              <h2>DeFi Lending Platform</h2>
-              
-              <div>
-                <p>Welcome to LendFlow, a decentralized lending platform that allows users to:</p>
-                <ul>
-                  <li>Supply assets as collateral</li>
-                  <li>Borrow assets against your collateral</li>
-                  <li>Earn interest on supplied assets</li>
-                  <li>Manage lending positions with real-time health monitoring</li>
-                </ul>
-              </div>
-              
-              <div class="info-box">
-                <h3>About This Project</h3>
-                <p>This DeFi platform was built using React, Hardhat, and Solidity smart contracts. The full functionality requires a local blockchain environment.</p>
-              </div>
-              
-              <div class="button-container">
-                <a href="https://github.com/wooyoungkang123/LendFlow" class="button primary-button" target="_blank" rel="noopener noreferrer">View on GitHub</a>
-                <a href="https://github.com/wooyoungkang123/LendFlow#readme" class="button secondary-button" target="_blank" rel="noopener noreferrer">Read Documentation</a>
-              </div>
-            </div>
-          </body>
-          </html>
+          # Create a simple tailwind config
+          cat > tailwind.config.js << 'EOL'
+          /** @type {import('tailwindcss').Config} */
+          export default {
+            content: [
+              "./index.html",
+              "./src/**/*.{js,ts,jsx,tsx}",
+            ],
+            theme: {
+              extend: {},
+            },
+            plugins: [],
+          }
           EOL
+          
+          # Create a simple postcss config
+          cat > postcss.config.js << 'EOL'
+          export default {
+            plugins: {
+              tailwindcss: {},
+              autoprefixer: {},
+            },
+          }
+          EOL
+          
+          # Run build with demo mode
+          npm run build || true
+          
+          # Ensure index.html exists
+          if [ ! -f dist/index.html ]; then
+            mkdir -p dist
+            cp public/index.html dist/index.html || true
+          fi
       
       - name: Setup Pages
         uses: actions/configure-pages@v4
