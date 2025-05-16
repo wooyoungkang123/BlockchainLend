@@ -4,4 +4,5 @@
 export VITE_SKIP_TS_CHECK=true
 export VITE_DEVELOPMENT_MODE=true
 
-npx vite --force 
+# Use the direct path to vite
+node node_modules/vite/bin/vite.js --force 
