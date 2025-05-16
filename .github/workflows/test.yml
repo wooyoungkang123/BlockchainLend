@@ -40,6 +40,6 @@ jobs:
 
       - name: Run Forge tests
         run: |
-          forge test -vvv
+          forge test --match-path "test/*.sol" -vvv
         id: test
         continue-on-error: true
