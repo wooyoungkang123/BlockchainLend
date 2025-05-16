@@ -11,7 +11,7 @@ import "@chainlink/contracts/src/v0.8/shared/interfaces/AggregatorV3Interface.so
  * @title LendingPool
  * @dev A lending pool contract that uses Chainlink price feeds for secure pricing
  */
-contract LendingPool is ReentrancyGuard, Ownable {
+contract LendingPool is ReentrancyGuard, Ownable(msg.sender) {
     using SafeERC20 for IERC20;
 
     // Token being lent out
@@ -76,8 +76,6 @@ contract LendingPool is ReentrancyGuard, Ownable {
         } catch {
             // If this fails (e.g., on a local network), we just continue
         }
-
-        _transferOwnership(msg.sender);
     }
 
     /**

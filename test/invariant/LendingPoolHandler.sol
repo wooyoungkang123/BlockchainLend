@@ -43,9 +43,10 @@ contract LendingPoolHandler is Test {
         lendingPool = _lendingPool;
         token = _token;
 
-        // Set up CCIP receiver
+        // Set up CCIP receiver - this is now set by the test
         ccipReceiver = makeAddr("ccipReceiver");
-        lendingPool.setCCIPReceiver(ccipReceiver);
+        
+        // Mint tokens to the CCIP receiver
         token.mint(ccipReceiver, INITIAL_SUPPLY);
         vm.prank(ccipReceiver);
         token.approve(address(lendingPool), type(uint256).max);
@@ -107,18 +108,18 @@ contract LendingPoolHandler is Test {
         address actor = actors[actorIndex];
 
         // Get current deposit balance from contract
-        uint256 currentDeposit = lendingPool.depositBalances(actor);
+        uint256 currentDeposit = lendingPool.deposits(actor);
 
         // Bound amount to actual deposit
         amount = bound(amount, 0, currentDeposit);
 
         // Skip if nothing to withdraw or not enough available liquidity
-        if (amount == 0 || amount > lendingPool.availableLiquidity()) {
+        if (amount == 0 || amount > lendingPool.getAvailableLiquidity()) {
             return;
         }
 
         // Ensure withdrawal respects collateral requirements
-        uint256 currentBorrow = lendingPool.borrowBalances(actor);
+        uint256 currentBorrow = lendingPool.borrows(actor);
         if (currentBorrow > 0) {
             // Ensure 2:1 collateral ratio is maintained
             uint256 minimumDeposit = currentBorrow * 2;
@@ -153,8 +154,8 @@ contract LendingPoolHandler is Test {
         address actor = actors[actorIndex];
 
         // Get current deposit and borrow balances
-        uint256 currentDeposit = lendingPool.depositBalances(actor);
-        uint256 currentBorrow = lendingPool.borrowBalances(actor);
+        uint256 currentDeposit = lendingPool.deposits(actor);
+        uint256 currentBorrow = lendingPool.borrows(actor);
 
         // Calculate maximum borrowable amount (50% of deposit)
         uint256 maxBorrowable = currentDeposit / 2;
@@ -169,7 +170,7 @@ contract LendingPoolHandler is Test {
         amount = bound(amount, 1, maxBorrowable);
 
         // Check available liquidity
-        if (amount > lendingPool.availableLiquidity()) {
+        if (amount > lendingPool.getAvailableLiquidity()) {
             return; // Not enough liquidity in the pool
         }
 
@@ -195,7 +196,7 @@ contract LendingPoolHandler is Test {
         address actor = actors[actorIndex];
 
         // Get current borrow balance
-        uint256 currentBorrow = lendingPool.borrowBalances(actor);
+        uint256 currentBorrow = lendingPool.borrows(actor);
 
         // Skip if nothing to repay
         if (currentBorrow == 0) {
@@ -237,7 +238,7 @@ contract LendingPoolHandler is Test {
         address borrower = actors[actorIndex];
 
         // Get current borrow balance
-        uint256 currentBorrow = lendingPool.borrowBalances(borrower);
+        uint256 currentBorrow = lendingPool.borrows(borrower);
 
         // Skip if nothing to repay
         if (currentBorrow == 0) {
@@ -259,7 +260,7 @@ contract LendingPoolHandler is Test {
 
         // Execute cross-chain repayment
         vm.startPrank(ccipReceiver);
-        lendingPool.repayOnBehalf(borrower, address(token), amount);
+        lendingPool.repayOnBehalf(borrower, amount);
         vm.stopPrank();
 
         // Update ghost variables
@@ -310,7 +311,7 @@ contract LendingPoolHandler is Test {
      */
     function calculateTotalDeposits() external view returns (uint256 sum) {
         for (uint256 i = 0; i < actors.length; i++) {
-            sum += lendingPool.depositBalances(actors[i]);
+            sum += lendingPool.deposits(actors[i]);
         }
         return sum;
     }
@@ -321,7 +322,7 @@ contract LendingPoolHandler is Test {
      */
     function calculateTotalBorrows() external view returns (uint256 sum) {
         for (uint256 i = 0; i < actors.length; i++) {
-            sum += lendingPool.borrowBalances(actors[i]);
+            sum += lendingPool.borrows(actors[i]);
         }
         return sum;
     }
@@ -334,7 +335,7 @@ contract LendingPoolHandler is Test {
         // Invariant 1: Sum of all deposits should match totalDeposits
         uint256 sumDeposits = 0;
         for (uint256 i = 0; i < actors.length; i++) {
-            sumDeposits += lendingPool.depositBalances(actors[i]);
+            sumDeposits += lendingPool.deposits(actors[i]);
         }
         if (sumDeposits != lendingPool.totalDeposits()) {
             return false;
@@ -343,7 +344,7 @@ contract LendingPoolHandler is Test {
         // Invariant 2: Sum of all borrows should match totalBorrows
         uint256 sumBorrows = 0;
         for (uint256 i = 0; i < actors.length; i++) {
-            sumBorrows += lendingPool.borrowBalances(actors[i]);
+            sumBorrows += lendingPool.borrows(actors[i]);
         }
         if (sumBorrows != lendingPool.totalBorrows()) {
             return false;
@@ -363,8 +364,8 @@ contract LendingPoolHandler is Test {
         // Invariant 5: No borrower can have borrow > deposit/2
         for (uint256 i = 0; i < actors.length; i++) {
             address actor = actors[i];
-            uint256 deposit = lendingPool.depositBalances(actor);
-            uint256 borrow = lendingPool.borrowBalances(actor);
+            uint256 deposit = lendingPool.deposits(actor);
+            uint256 borrow = lendingPool.borrows(actor);
 
             if (borrow > 0 && borrow * 2 > deposit) {
                 return false;
@@ -372,5 +373,13 @@ contract LendingPoolHandler is Test {
         }
 
         return true;
+    }
+
+    /**
+     * @notice Returns the number of actors
+     * @return The number of actors
+     */
+    function getActorCount() external view returns (uint256) {
+        return actors.length;
     }
 }

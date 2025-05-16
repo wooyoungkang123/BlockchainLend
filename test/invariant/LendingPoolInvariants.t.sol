@@ -4,6 +4,7 @@ pragma solidity ^0.8.20;
 import "forge-std/Test.sol";
 import "../../contracts/LendingPool.sol";
 import "../../contracts/test/MockERC20.sol";
+import "../../contracts/mocks/MockPriceFeed.sol";
 import "./LendingPoolHandler.sol";
 
 /**
@@ -14,15 +15,29 @@ contract LendingPoolInvariants is Test {
     // Contracts
     LendingPool public lendingPool;
     MockERC20 public token;
+    MockPriceFeed public priceFeed;
     LendingPoolHandler public handler;
 
     function setUp() public {
         // Deploy token
         token = new MockERC20("Test Token", "TEST");
+        
+        // Deploy price feed
+        priceFeed = new MockPriceFeed(2000 * 10**8, 8);
 
-        // Deploy lending pool
-        lendingPool = new LendingPool(address(token));
+        // Deploy lending pool with this test contract as owner
+        lendingPool = new LendingPool(address(token), address(priceFeed));
+        
+        // Mint tokens to the pool for liquidity
+        token.mint(address(lendingPool), 1_000_000 * 10**18);
 
+        // Create a CCIP receiver address
+        address ccipReceiver = makeAddr("ccipReceiver");
+        lendingPool.setCCIPReceiver(ccipReceiver);
+
+        // Make sure the handler uses the same test contract address for owner actions
+        vm.makePersistent(address(this));
+        
         // Deploy handler
         handler = new LendingPoolHandler(lendingPool, token);
 
@@ -95,10 +110,11 @@ contract LendingPoolInvariants is Test {
      * @notice Invariant: No borrower can have borrow > deposit/2
      */
     function invariant_borrowLimit() public {
-        for (uint256 i = 0; i < handler.actors.length; i++) {
+        uint256 numActors = handler.getActorCount();
+        for (uint256 i = 0; i < numActors; i++) {
             address actor = handler.actors(i);
-            uint256 deposit = lendingPool.depositBalances(actor);
-            uint256 borrow = lendingPool.borrowBalances(actor);
+            uint256 deposit = lendingPool.deposits(actor);
+            uint256 borrow = lendingPool.borrows(actor);
 
             if (deposit > 0) {
                 assertLe(borrow * 2, deposit, "User borrowed more than 50% of deposit");

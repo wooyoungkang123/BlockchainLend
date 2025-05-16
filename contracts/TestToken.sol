@@ -6,15 +6,14 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 
 /**
  * @title TestToken
- * @dev A simple ERC20 token for testing purposes
+ * @dev A simple ERC20 token for testing purposes, with minting capabilities
  */
-contract TestToken is ERC20, Ownable {
+contract TestToken is ERC20, Ownable(msg.sender) {
     /**
      * @dev Sets the values for name and symbol, and mints initial supply to the deployer
      */
     constructor(string memory name, string memory symbol, uint256 initialSupply) ERC20(name, symbol) {
         _mint(msg.sender, initialSupply * 10 ** decimals());
-        _transferOwnership(msg.sender);
     }
 
     /**

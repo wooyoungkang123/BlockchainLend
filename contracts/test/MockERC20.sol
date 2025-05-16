@@ -9,7 +9,7 @@ import "@openzeppelin/contracts/access/Ownable.sol";
  * @notice Mock ERC20 token for testing
  */
 contract MockERC20 is ERC20, Ownable {
-    constructor(string memory name, string memory symbol) ERC20(name, symbol) Ownable() {}
+    constructor(string memory name, string memory symbol) ERC20(name, symbol) Ownable(msg.sender) {}
 
     /**
      * @notice Mint tokens to an address

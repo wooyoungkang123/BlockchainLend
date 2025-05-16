@@ -9,9 +9,9 @@ contract MockPriceFeed is AggregatorV3Interface {
     string private _description;
     uint256 private _version;
 
-    constructor(int256 initialPrice, uint8 decimals) {
+    constructor(int256 initialPrice, uint8 decimalPlaces) {
         _price = initialPrice;
-        _decimals = decimals;
+        _decimals = decimalPlaces;
         _description = "Mock ETH/USD Price Feed";
         _version = 1;
     }

@@ -8,7 +8,7 @@ import "@openzeppelin/contracts/access/Ownable.sol";
  * @dev Contract to maintain user reputation scores from GitHub data
  * Uses a pull-based pattern where updates are triggered by authorized oracles
  */
-contract ReputationOracle is Ownable {
+contract ReputationOracle is Ownable(msg.sender) {
     // Reputation score for each GitHub username
     mapping(string => uint256) private githubScores;
 

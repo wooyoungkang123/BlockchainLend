@@ -1,8 +1,9 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.19;
 
-import "@openzeppelin/contracts-upgradeable/token/ERC20/IERC20Upgradeable.sol";
-import "@openzeppelin/contracts-upgradeable/token/ERC20/utils/SafeERC20Upgradeable.sol";
+// Change all imports to use the standard contracts where possible
+import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 import "@openzeppelin/contracts-upgradeable/utils/ReentrancyGuardUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
@@ -14,10 +15,10 @@ import "@chainlink/contracts/src/v0.8/shared/interfaces/AggregatorV3Interface.so
  * @dev An upgradeable lending pool contract that allows users to deposit and borrow ERC20 tokens
  */
 contract LendingPoolUpgradeable is Initializable, ReentrancyGuardUpgradeable, OwnableUpgradeable, UUPSUpgradeable {
-    using SafeERC20Upgradeable for IERC20Upgradeable;
+    using SafeERC20 for IERC20;
 
     // Token being lent out
-    IERC20Upgradeable public lendingToken;
+    IERC20 public lendingToken;
 
     // Tracks user deposits
     mapping(address => uint256) public deposits;
@@ -54,12 +55,11 @@ contract LendingPoolUpgradeable is Initializable, ReentrancyGuardUpgradeable, Ow
         require(_lendingToken != address(0), "LendingPoolUpgradeable: token address cannot be zero");
 
         __ReentrancyGuard_init();
-        __Ownable_init();
+        __Ownable_init(msg.sender);
         __UUPSUpgradeable_init();
 
-        lendingToken = IERC20Upgradeable(_lendingToken);
+        lendingToken = IERC20(_lendingToken);
         borrowInterestRate = 500; // Default 5%
-        _transferOwnership(msg.sender);
     }
 
     /**

@@ -49,7 +49,7 @@ contract Deploy {
     // Helper function to change ETH price (for testing liquidations)
     function changeEthPrice(int256 newEthPrice) external {
         require(address(priceFeed) != address(0), "PriceFeed not deployed");
-        priceFeed.setPrice(newEthPrice);
+        priceFeed.updatePrice(newEthPrice);
     }
     
     // Helper function to mint more tokens

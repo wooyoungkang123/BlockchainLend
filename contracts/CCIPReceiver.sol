@@ -14,7 +14,7 @@ import "@chainlink/contracts/src/v0.8/ccip/applications/CCIPReceiver.sol";
  * @dev A contract for receiving and processing cross-chain repayments using Chainlink CCIP
  * This contract extends the Chainlink CCIP receiver to handle loan repayments coming from other chains
  */
-contract LoanCCIPReceiver is CCIPReceiver, Ownable, ReentrancyGuard {
+contract LoanCCIPReceiver is CCIPReceiver, Ownable(msg.sender), ReentrancyGuard {
     using SafeERC20 for IERC20;
 
     // LendingPool address
@@ -43,7 +43,6 @@ contract LoanCCIPReceiver is CCIPReceiver, Ownable, ReentrancyGuard {
     constructor(address _router, address _lendingPool) CCIPReceiver(_router) {
         require(_lendingPool != address(0), "LoanCCIPReceiver: lending pool cannot be zero address");
         lendingPool = _lendingPool;
-        _transferOwnership(msg.sender);
     }
 
     /**
@@ -147,7 +146,7 @@ contract LoanCCIPReceiver is CCIPReceiver, Ownable, ReentrancyGuard {
         require(msg.sender == address(this), "LoanCCIPReceiver: only self-call allowed");
 
         // Approve lending pool to spend the tokens
-        IERC20(token).safeApprove(lendingPool, amount);
+        IERC20(token).approve(lendingPool, amount);
 
         // Call the repay function on the lending pool
         // Format of call depends on the lending pool's interface

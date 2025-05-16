@@ -11,7 +11,7 @@ import "@chainlink/contracts/src/v0.8/ccip/libraries/Client.sol";
  * @title CCIPSenderExample
  * @dev A simple contract to demonstrate sending tokens and messages using Chainlink CCIP
  */
-contract CCIPSenderExample is Ownable {
+contract CCIPSenderExample is Ownable(msg.sender) {
     using SafeERC20 for IERC20;
 
     // Chainlink CCIP Router interface
@@ -47,7 +47,6 @@ contract CCIPSenderExample is Ownable {
         require(_linkToken != address(0), "CCIPSenderExample: LINK token cannot be zero address");
         router = IRouterClient(_router);
         linkToken = _linkToken;
-        _transferOwnership(msg.sender);
     }
 
     /**
