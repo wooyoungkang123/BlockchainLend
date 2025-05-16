@@ -119,7 +119,7 @@ These contracts are designed to be tested on a web-based Contract Tester platfor
    - Check account data using `getUserAccountData(address)`
    - Test liquidations by changing the ETH price with `changeEthPrice(newPrice)` on the Deploy contract
 
-## Example Testing Workflow
+## Testing Workflow
 
 1. Deploy `Deploy` contract
 2. Call `deployAll()` to set up everything
