@@ -7,7 +7,9 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "start:dev": "npx vite --force",
+    "start:hardhat": "../scripts/dev.sh"
   },
   "dependencies": {
     "@rainbow-me/rainbowkit": "^2.2.4",
