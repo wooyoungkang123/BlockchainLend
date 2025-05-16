@@ -11,9 +11,9 @@ import {Ownable} from "../../lib/openzeppelin-contracts/contracts/access/Ownable
 contract MockToken is ERC20, Ownable {
     uint8 private _decimals;
 
-    constructor(string memory name, string memory symbol, uint8 decimalsValue) 
-        ERC20(name, symbol) 
-        Ownable(msg.sender) 
+    constructor(string memory name, string memory symbol, uint8 decimalsValue)
+        ERC20(name, symbol)
+        Ownable(msg.sender)
     {
         _decimals = decimalsValue;
     }
@@ -29,4 +29,4 @@ contract MockToken is ERC20, Ownable {
     function decimals() public view virtual override returns (uint8) {
         return _decimals;
     }
-} 
+}

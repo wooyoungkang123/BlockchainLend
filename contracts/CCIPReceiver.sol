@@ -16,13 +16,13 @@ import "@chainlink/contracts/src/v0.8/ccip/applications/CCIPReceiver.sol";
  */
 contract LoanCCIPReceiver is CCIPReceiver, Ownable, ReentrancyGuard {
     using SafeERC20 for IERC20;
-    
-    // LendingPool address 
+
+    // LendingPool address
     address public lendingPool;
-    
+
     // Mapping of source chain to allowed source address
     mapping(uint64 => mapping(address => bool)) public whitelistedSources;
-    
+
     // Events
     event CCIPRepaymentReceived(
         bytes32 indexed messageId,
@@ -32,14 +32,8 @@ contract LoanCCIPReceiver is CCIPReceiver, Ownable, ReentrancyGuard {
         address token,
         uint256 amount
     );
-    
-    event RepaymentProcessed(
-        bytes32 indexed messageId,
-        address borrower,
-        address token,
-        uint256 amount,
-        bool success
-    );
+
+    event RepaymentProcessed(bytes32 indexed messageId, address borrower, address token, uint256 amount, bool success);
 
     /**
      * @dev Constructor initializes the contract with a router and lending pool
@@ -51,7 +45,7 @@ contract LoanCCIPReceiver is CCIPReceiver, Ownable, ReentrancyGuard {
         lendingPool = _lendingPool;
         _transferOwnership(msg.sender);
     }
-    
+
     /**
      * @dev Sets the lending pool address
      * @param _lendingPool The new lending pool address
@@ -60,7 +54,7 @@ contract LoanCCIPReceiver is CCIPReceiver, Ownable, ReentrancyGuard {
         require(_lendingPool != address(0), "LoanCCIPReceiver: lending pool cannot be zero address");
         lendingPool = _lendingPool;
     }
-    
+
     /**
      * @dev Add a trusted source for cross-chain messages
      * @param _sourceChainSelector The chain selector of the source chain
@@ -70,7 +64,7 @@ contract LoanCCIPReceiver is CCIPReceiver, Ownable, ReentrancyGuard {
         require(_sourceAddress != address(0), "LoanCCIPReceiver: source address cannot be zero address");
         whitelistedSources[_sourceChainSelector][_sourceAddress] = true;
     }
-    
+
     /**
      * @dev Remove a trusted source for cross-chain messages
      * @param _sourceChainSelector The chain selector of the source chain
@@ -79,7 +73,7 @@ contract LoanCCIPReceiver is CCIPReceiver, Ownable, ReentrancyGuard {
     function removeTrustedSource(uint64 _sourceChainSelector, address _sourceAddress) external onlyOwner {
         whitelistedSources[_sourceChainSelector][_sourceAddress] = false;
     }
-    
+
     /**
      * @dev Override of the CCIPReceiver's _ccipReceive function to handle incoming CCIP messages
      * @param message The CCIP message containing tokens and data
@@ -90,16 +84,16 @@ contract LoanCCIPReceiver is CCIPReceiver, Ownable, ReentrancyGuard {
             whitelistedSources[message.sourceChainSelector][abi.decode(message.sender, (address))],
             "LoanCCIPReceiver: sender not whitelisted"
         );
-        
+
         // Decode the message data
         (address borrower, bytes memory repaymentData) = abi.decode(message.data, (address, bytes));
-        
+
         // Check if any tokens were received
         if (message.destTokenAmounts.length > 0) {
             for (uint256 i = 0; i < message.destTokenAmounts.length; i++) {
                 address token = message.destTokenAmounts[i].token;
                 uint256 amount = message.destTokenAmounts[i].amount;
-                
+
                 // Emit an event for the received repayment
                 emit CCIPRepaymentReceived(
                     message.messageId,
@@ -109,21 +103,15 @@ contract LoanCCIPReceiver is CCIPReceiver, Ownable, ReentrancyGuard {
                     token,
                     amount
                 );
-                
+
                 // Process the repayment
                 bool success = _processRepayment(message.messageId, borrower, token, amount, repaymentData);
-                
-                emit RepaymentProcessed(
-                    message.messageId,
-                    borrower,
-                    token,
-                    amount,
-                    success
-                );
+
+                emit RepaymentProcessed(message.messageId, borrower, token, amount, success);
             }
         }
     }
-    
+
     /**
      * @dev Process a repayment by forwarding tokens to the lending pool
      * @param messageId The CCIP message ID
@@ -146,7 +134,7 @@ contract LoanCCIPReceiver is CCIPReceiver, Ownable, ReentrancyGuard {
             return false;
         }
     }
-    
+
     /**
      * @dev Executes the repayment by approving and calling the lending pool
      * This function is separated to ensure errors can be caught and handled
@@ -155,28 +143,21 @@ contract LoanCCIPReceiver is CCIPReceiver, Ownable, ReentrancyGuard {
      * @param amount The amount being repaid
      * @param repaymentData Additional data related to the repayment
      */
-    function _executeRepay(
-        address borrower,
-        address token,
-        uint256 amount,
-        bytes memory repaymentData
-    ) external {
+    function _executeRepay(address borrower, address token, uint256 amount, bytes memory repaymentData) external {
         require(msg.sender == address(this), "LoanCCIPReceiver: only self-call allowed");
-        
+
         // Approve lending pool to spend the tokens
         IERC20(token).safeApprove(lendingPool, amount);
-        
+
         // Call the repay function on the lending pool
         // Format of call depends on the lending pool's interface
         // For example with our LendingPool:
-        (bool success, ) = lendingPool.call(
-            abi.encodeWithSignature("repayOnBehalf(address,uint256)", borrower, amount)
-        );
-        
+        (bool success,) = lendingPool.call(abi.encodeWithSignature("repayOnBehalf(address,uint256)", borrower, amount));
+
         // Revert if the call failed
         require(success, "LoanCCIPReceiver: repayment failed");
     }
-    
+
     /**
      * @dev Emergency function to withdraw tokens from the contract if they get stuck
      * @param token The token to withdraw
@@ -186,7 +167,7 @@ contract LoanCCIPReceiver is CCIPReceiver, Ownable, ReentrancyGuard {
     function emergencyWithdraw(address token, address to, uint256 amount) external onlyOwner {
         IERC20(token).safeTransfer(to, amount);
     }
-    
+
     /**
      * @dev Emergency function to withdraw native tokens from the contract
      * @param to The address to send the tokens to
@@ -194,12 +175,12 @@ contract LoanCCIPReceiver is CCIPReceiver, Ownable, ReentrancyGuard {
      */
     function emergencyWithdrawETH(address payable to, uint256 amount) external onlyOwner {
         require(address(this).balance >= amount, "Insufficient ETH balance");
-        (bool success, ) = to.call{value: amount}("");
+        (bool success,) = to.call{value: amount}("");
         require(success, "ETH transfer failed");
     }
-    
+
     /**
      * @dev Receive function to accept ETH
      */
     receive() external payable {}
-} 
+}

@@ -9,11 +9,8 @@ import "@openzeppelin/contracts/access/Ownable.sol";
  * @notice Mock ERC20 token for testing
  */
 contract MockERC20 is ERC20, Ownable {
-    constructor(string memory name, string memory symbol) 
-        ERC20(name, symbol) 
-        Ownable()
-    {}
-    
+    constructor(string memory name, string memory symbol) ERC20(name, symbol) Ownable() {}
+
     /**
      * @notice Mint tokens to an address
      * @param to Address to mint tokens to
@@ -22,7 +19,7 @@ contract MockERC20 is ERC20, Ownable {
     function mint(address to, uint256 amount) external onlyOwner {
         _mint(to, amount);
     }
-    
+
     /**
      * @notice Burn tokens from an address
      * @param from Address to burn tokens from
@@ -31,4 +28,4 @@ contract MockERC20 is ERC20, Ownable {
     function burn(address from, uint256 amount) external onlyOwner {
         _burn(from, amount);
     }
-} 
+}

@@ -15,7 +15,7 @@ interface ILendingPool {
     event Borrow(address indexed user, uint256 amount);
     event Repay(address indexed user, uint256 amount);
     event Liquidate(address indexed liquidator, address indexed borrower, uint256 amount);
-    
+
     // View functions
     function lendingToken() external view returns (IERC20);
     function ethUsdPriceFeed() external view returns (AggregatorV3Interface);
@@ -24,26 +24,29 @@ interface ILendingPool {
     function lastInterestUpdateTime() external view returns (uint256);
     function depositBalances(address user) external view returns (uint256);
     function borrowBalances(address user) external view returns (uint256);
-    
+
     // Core functions
     function deposit() external payable;
     function withdraw(uint256 amount) external;
     function borrow(uint256 amount) external;
     function repay(uint256 amount) external;
     function liquidate(address borrower, uint256 amount) external;
-    
+
     // Utility functions
     function updateInterest() external;
-    function getUserAccountData(address user) external view returns (uint256 collateralEth, uint256 borrowAmount, uint256 healthFactor);
+    function getUserAccountData(address user)
+        external
+        view
+        returns (uint256 collateralEth, uint256 borrowAmount, uint256 healthFactor);
     function getCollateralValue(address user) external view returns (uint256);
     function getEthUsdValue(uint256 ethAmount) external view returns (uint256);
     function getLatestEthUsdPrice() external view returns (uint256);
-    
+
     // Admin functions
     function setInterestRate(uint256 newInterestRate) external;
     function adminWithdrawTokens(uint256 amount) external;
-    
+
     // Stats functions
     function totalDeposits() external view returns (uint256);
     function totalBorrows() external view returns (uint256);
-} 
+}

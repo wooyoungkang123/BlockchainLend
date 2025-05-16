@@ -12,12 +12,8 @@ contract TestToken is ERC20, Ownable {
     /**
      * @dev Sets the values for name and symbol, and mints initial supply to the deployer
      */
-    constructor(
-        string memory name,
-        string memory symbol,
-        uint256 initialSupply
-    ) ERC20(name, symbol) {
-        _mint(msg.sender, initialSupply * 10**decimals());
+    constructor(string memory name, string memory symbol, uint256 initialSupply) ERC20(name, symbol) {
+        _mint(msg.sender, initialSupply * 10 ** decimals());
         _transferOwnership(msg.sender);
     }
 
@@ -35,7 +31,7 @@ contract TestToken is ERC20, Ownable {
      * @param amount The amount of tokens to request
      */
     function faucet(uint256 amount) external {
-        require(amount <= 1000 * 10**decimals(), "TestToken: amount too large");
+        require(amount <= 1000 * 10 ** decimals(), "TestToken: amount too large");
         _mint(msg.sender, amount);
     }
-} 
+}
