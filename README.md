@@ -121,6 +121,36 @@ cd frontend
 npm run dev
 ```
 
+## Frontend Deployment
+
+The frontend can be deployed to GitHub Pages by following these steps:
+
+1. Go to the frontend directory: `cd frontend`
+2. Update the Vite config file (`vite.config.ts`) to include base path:
+   ```ts
+   export default defineConfig({
+     plugins: [react()],
+     base: '/LendFlow/'
+   })
+   ```
+3. Install gh-pages: `npm install --save-dev gh-pages`
+4. Add deployment scripts to package.json:
+   ```json
+   "scripts": {
+     // other scripts...
+     "predeploy": "npm run build",
+     "deploy": "gh-pages -d dist"
+   }
+   ```
+5. Deploy: `npm run deploy`
+
+Alternatively, the GitHub Actions workflow at `.github/workflows/frontend-deploy.yml` can automatically deploy your frontend whenever changes are pushed to the main branch. To enable this:
+
+1. In your GitHub repository, go to **Settings > Pages**
+2. Under **Build and deployment > Source**, select **GitHub Actions**
+
+Once deployed, your frontend will be available at: `https://[your-username].github.io/LendFlow/`
+
 ## Testing Workflow
 
 1. Deploy `Deploy` contract
