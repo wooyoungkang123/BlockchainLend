@@ -3,8 +3,6 @@ name: Deploy Frontend to GitHub Pages
 on:
   push:
     branches: [main]
-    paths:
-      - 'frontend/**'
   workflow_dispatch:
 
 # Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
@@ -36,50 +34,27 @@ jobs:
           cd frontend
           npm install
           npm install --save-dev @babel/plugin-transform-react-jsx
+          npm install --save-dev tailwindcss postcss autoprefixer
       
-      - name: Build Project (Skip TypeScript Checks)
+      - name: Setup Tailwind CSS
+        run: |
+          cd frontend
+          npx tailwindcss init -p
+      
+      - name: Build Project
         env:
           VITE_SKIP_TS_CHECK: true
           TSC_COMPILE_ON_ERROR: true
+          NODE_ENV: production
         run: |
           cd frontend
+          
           # Create .env file
           echo "VITE_SKIP_TS_CHECK=true" > .env
           echo "TSC_COMPILE_ON_ERROR=true" >> .env
           
-          # Run the build script that skips TypeScript checks
-          node scripts/build-no-ts-check.js
-          
-          # Fallback: If build fails, ensure we have a dist folder with index.html
-          if [ ! -f dist/index.html ]; then
-            mkdir -p dist
-            
-            # Create a simple index.html file
-            echo '<!DOCTYPE html>
-            <html lang="en">
-            <head>
-              <meta charset="UTF-8">
-              <meta name="viewport" content="width=device-width, initial-scale=1.0">
-              <title>LendFlow - DeFi Lending Platform</title>
-              <script src="https://cdn.tailwindcss.com"></script>
-            </head>
-            <body class="bg-gray-100 font-sans">
-              <div class="min-h-screen flex items-center justify-center">
-                <div class="bg-white p-8 rounded-lg shadow-lg max-w-md w-full">
-                  <h1 class="text-2xl font-bold text-blue-600 mb-4">LendFlow - DeFi Lending Platform</h1>
-                  <p class="mb-4">Connect your wallet to start lending and borrowing crypto assets.</p>
-                  <p class="text-sm text-gray-500 mb-4">This platform is currently in development mode.</p>
-                  <div class="mt-6 flex justify-center">
-                    <a href="https://github.com/wooyoungkang123/LendFlow" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition-colors">View on GitHub</a>
-                  </div>
-                </div>
-              </div>
-            </body>
-            </html>' > dist/index.html
-          fi
-          
-          # Copy public files if they exist and haven't been copied by the build
-          cp -r public/* dist/ || true
+          # Run build
+          npm run build
       
       - name: Setup Pages
         uses: actions/configure-pages@v4
