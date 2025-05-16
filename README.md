@@ -1,6 +1,6 @@
-# Lending Pool Smart Contracts
+# LendFlow Smart Contracts
 
-This repository contains Solidity smart contracts for a simplified lending pool that allows users to deposit ETH as collateral, borrow tokens, repay loans, and handle liquidations.
+This repository contains Solidity smart contracts for a simplified lending platform called LendFlow that allows users to deposit ETH as collateral, borrow tokens, repay loans, and handle liquidations.
 
 ## Project Structure
 
