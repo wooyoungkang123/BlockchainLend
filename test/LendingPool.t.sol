@@ -18,10 +18,10 @@ contract LendingPoolTest is Test {
     address public user2 = address(3);
 
     // Test constants
-    uint256 public constant DEPOSIT_AMOUNT = 1000 * 10**6; // 1000 USDC
-    uint256 public constant BORROW_AMOUNT = 500 * 10**6; // 500 USDC
-    int256 public constant ETH_PRICE = 2000 * 10**8; // $2000 per ETH
-    int256 public constant ETH_PRICE_CRASH = 1000 * 10**8; // $1000 per ETH (price crash)
+    uint256 public constant DEPOSIT_AMOUNT = 1000 * 10 ** 6; // 1000 USDC
+    uint256 public constant BORROW_AMOUNT = 500 * 10 ** 6; // 500 USDC
+    int256 public constant ETH_PRICE = 2000 * 10 ** 8; // $2000 per ETH
+    int256 public constant ETH_PRICE_CRASH = 1000 * 10 ** 8; // $1000 per ETH (price crash)
 
     function setUp() public {
         deployer = address(this);
@@ -88,7 +88,7 @@ contract LendingPoolTest is Test {
         uint256 maxBorrow = (DEPOSIT_AMOUNT * 7900) / 10000; // Just below 80% of deposit (liquidation threshold)
         lendingPool.borrow(maxBorrow);
         vm.stopPrank();
-        
+
         // Manually make the position undercollateralized by reducing deposits
         vm.store(
             address(lendingPool),
@@ -146,7 +146,7 @@ contract LendingPoolTest is Test {
 
         // Health factor should be good
         assertGt(healthAfter, 0);
-        
+
         vm.stopPrank();
     }
 }

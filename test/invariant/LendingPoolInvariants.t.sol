@@ -21,15 +21,15 @@ contract LendingPoolInvariants is Test {
     function setUp() public {
         // Deploy token
         token = new MockERC20("Test Token", "TEST");
-        
+
         // Deploy price feed
-        priceFeed = new MockPriceFeed(2000 * 10**8, 8);
+        priceFeed = new MockPriceFeed(2000 * 10 ** 8, 8);
 
         // Deploy lending pool with this test contract as owner
         lendingPool = new LendingPool(address(token), address(priceFeed));
-        
+
         // Mint tokens to the pool for liquidity
-        token.mint(address(lendingPool), 1_000_000 * 10**18);
+        token.mint(address(lendingPool), 1_000_000 * 10 ** 18);
 
         // Create a CCIP receiver address
         address ccipReceiver = makeAddr("ccipReceiver");
@@ -37,7 +37,7 @@ contract LendingPoolInvariants is Test {
 
         // Make sure the handler uses the same test contract address for owner actions
         vm.makePersistent(address(this));
-        
+
         // Deploy handler
         handler = new LendingPoolHandler(lendingPool, token);
 

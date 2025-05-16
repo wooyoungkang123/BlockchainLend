@@ -45,7 +45,7 @@ contract LendingPoolHandler is Test {
 
         // Set up CCIP receiver - this is now set by the test
         ccipReceiver = makeAddr("ccipReceiver");
-        
+
         // Mint tokens to the CCIP receiver
         token.mint(ccipReceiver, INITIAL_SUPPLY);
         vm.prank(ccipReceiver);
