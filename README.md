@@ -1,6 +1,6 @@
 # LendFlow Smart Contracts
 
-This repository contains Solidity smart contracts for a simplified lending platform called LendFlow that allows users to deposit ETH as collateral, borrow tokens, repay loans, and handle liquidations.
+This repository contains Solidity smart contracts for a simplified lending platform called LendFlow that allows users to deposit tokens as collateral, borrow tokens, repay loans, and handle liquidations.
 
 ## Project Structure
 
@@ -17,40 +17,30 @@ project/
 │   │   └── LendingPool.sol    # Main lending pool implementation
 │   ├── interfaces/      # Interfaces
 │   │   └── ILendingPool.sol   # Interface for the lending pool
-│   └── mocks/           # Mock contracts for testing
-│       ├── MockToken.sol      # Mock ERC20 token for testing
-│       └── MockPriceFeed.sol  # Mock price feed for testing
+│   ├── mocks/           # Mock contracts for testing
+│   │   ├── MockToken.sol      # Mock ERC20 token for testing
+│   │   └── MockPriceFeed.sol  # Mock price feed for testing
+│   ├── test/            # Test-specific contracts
+│   │   └── MockERC20.sol      # Mock ERC20 for testing
+│   └── LendingPool.sol  # Latest version of lending pool
 ├── deployments/         # Deployment information
-│   ├── deployments.json          # General deployments
-│   └── upgradeable-deployments.json  # Upgradeable contract deployments
-├── docs/                # Documentation
-│   ├── guides/          # User guides and reference documentation
-│   │   ├── DEPLOYMENT.md        # Deployment guide
-│   │   ├── VERIFICATION.md      # Contract verification guide
-│   │   └── ...                  # Other guides
-│   └── reports/         # Test and audit reports
-│       ├── security/            # Security audit reports
-│       ├── slither-report.txt   # Slither analysis output
-│       └── tests-summary.md     # Test results summary
-├── frontend/            # Frontend application code (if applicable)
-├── logs/                # Log files
-│   ├── tests-auto.log   # Automated test logs
-│   └── tests-unit.log   # Unit test logs
+├── frontend/            # Frontend application code
+│   └── src/             # Frontend source code
 ├── scripts/
 │   ├── deploy.js        # JavaScript deployment script
-│   ├── Deploy.sol       # Solidity deployment script
-│   ├── foundry/         # Foundry-specific scripts
-│   └── helpers/         # Helper scripts
-│       └── config.js    # Configuration helpers
-└── test/
-    └── LendingPool.t.sol      # Tests for the lending pool
+│   └── Deploy.sol       # Solidity deployment script
+├── test/
+│   ├── LendingPool.t.sol      # Tests for the lending pool
+│   └── invariant/             # Invariant tests (more complex test scenarios)
+└── .github/
+    └── workflows/       # GitHub Actions CI/CD workflows
 ```
 
 ## Contracts Overview
 
 1. **LendingPool.sol**: The main contract that implements lending functionality:
-   - Deposit ETH as collateral
-   - Withdraw ETH collateral
+   - Deposit tokens as collateral
+   - Withdraw tokens
    - Borrow tokens against collateral
    - Repay borrowed tokens
    - Liquidate undercollateralized positions
@@ -58,7 +48,7 @@ project/
 
 2. **ILendingPool.sol**: Interface defining all functions and events in the LendingPool contract
 
-3. **MockToken.sol**: A simple ERC20 token for testing purposes:
+3. **MockERC20.sol**: A simple ERC20 token for testing purposes:
    - Configurable decimals
    - Mint and burn functions for testing
 
@@ -67,6 +57,13 @@ project/
    - Compatible with Chainlink's AggregatorV3Interface
 
 5. **Deploy.sol**: A deployment script that deploys and initializes all contracts
+
+## Recent Changes
+
+- **Ownable Constructor Updates**: Updated all contracts to use the latest OpenZeppelin Ownable constructor pattern (`Ownable(msg.sender)`)
+- **MockPriceFeed Fix**: Renamed `updatePrice` function to ensure compatibility with the deployment script
+- **Test Updates**: Updated test files to work with the new contract structures
+- **CI Pipeline**: Added GitHub Actions workflow for continuous integration that runs tests automatically
 
 ## Setup with Foundry
 
@@ -95,7 +92,14 @@ forge build
 ### Test
 
 ```bash
+# Run all tests
 forge test
+
+# Run only basic tests (excluding invariant tests)
+forge test --match-path "test/*.sol"
+
+# Format code (important for CI)
+forge fmt
 ```
 
 ### Deploy
@@ -104,37 +108,34 @@ forge test
 forge script scripts/Deploy.sol:Deploy --rpc-url <your_rpc_url> --private-key <your_private_key>
 ```
 
-## Setup for Testing Platform
+## Running the Frontend
 
-These contracts are designed to be tested on a web-based Contract Tester platform. The imports reference OpenZeppelin and Chainlink contracts that would need to be provided by the testing environment.
+The project includes a frontend application built with React, Vite and ethers.js.
 
-### Testing Steps
+```bash
+# Start a local Hardhat node
+npm run dev
 
-1. Deploy the `Deploy` contract from the scripts directory
-2. Call the `deployAll()` function to deploy all contracts and initialize them
-3. Interact with the LendingPool contract to test functionality:
-   - Deposit ETH using `deposit()` (send ETH along with the transaction)
-   - Borrow tokens using `borrow(amount)`
-   - Repay loans using `repay(amount)` (requires approval first)
-   - Check account data using `getUserAccountData(address)`
-   - Test liquidations by changing the ETH price with `changeEthPrice(newPrice)` on the Deploy contract
+# In another terminal, start the frontend
+cd frontend
+npm run dev
+```
 
 ## Testing Workflow
 
 1. Deploy `Deploy` contract
 2. Call `deployAll()` to set up everything
-3. Take note of the returned addresses for the Token, PriceFeed, and LendingPool
+3. Note the returned addresses for the Token, PriceFeed, and LendingPool
 4. Approve the LendingPool to spend your tokens: `token.approve(lendingPoolAddress, amount)`
-5. Deposit ETH as collateral: `lendingPool.deposit()` with ETH value
+5. Deposit tokens as collateral: `lendingPool.deposit(amount)`
 6. Borrow tokens: `lendingPool.borrow(amount)`
 7. Check your position: `lendingPool.getUserAccountData(yourAddress)`
 8. To test liquidations:
-   - Lower ETH price: `deploy.changeEthPrice(lowerPrice)`
-   - From another account, call `lendingPool.liquidate(borrowerAddress, amount)`
+   - From another account, call `lendingPool.liquidate(borrowerAddress)`
 
 ## Notes
 
-- The LendingPool uses ETH as collateral and ERC20 tokens (mocked USDC) as the borrowed asset
-- Liquidation occurs when a position's health factor falls below 100% (collateral value * 0.8 < borrowed value)
-- Liquidators receive a 10% bonus on the collateral they seize
+- The LendingPool uses tokens as collateral and borrowed assets
+- Liquidation occurs when a position's health factor falls below 80%
 - The interest rate calculation is simplified for testing purposes
+- Continuous Integration is set up to validate code formatting and run tests on each push
