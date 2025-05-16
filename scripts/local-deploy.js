@@ -1,12 +1,11 @@
 // Local Hardhat Deployment Script
-// Deploys both TestToken and LendingPool to the local Hardhat network
 const hre = require("hardhat");
 const { ethers } = require("hardhat");
 
 async function main() {
-  console.log("Starting local Hardhat network deployment...");
+  console.log("Starting local deployment of test tokens and lending contracts...");
   
-  // Get deployer account
+  // Get deployer account and check balance
   const [deployer] = await ethers.getSigners();
   console.log(`Deploying with account: ${deployer.address}`);
   
@@ -14,11 +13,11 @@ async function main() {
   console.log(`Account balance: ${ethers.formatEther(balance)} ETH`);
   
   try {
-    // Verify we're on local network
+    // Verify we're on localhost
     const network = await ethers.provider.getNetwork();
     console.log(`Connected to network: ${network.name} (Chain ID: ${network.chainId})`);
     
-    // Deploy TestToken first
+    // Deploy TestToken (USDC mock)
     console.log("\nDeploying TestToken (USDC mock)...");
     const TestToken = await ethers.getContractFactory("TestToken");
     const testToken = await TestToken.deploy(
@@ -27,13 +26,10 @@ async function main() {
       6                    // decimals (USDC has 6 decimals)
     );
     
-    const tokenTxHash = testToken.deploymentTransaction().hash;
-    console.log(`TestToken deployment transaction sent: ${tokenTxHash}`);
-    
     await testToken.waitForDeployment();
     const tokenAddress = await testToken.getAddress();
-    console.log(`TestToken deployed to: ${tokenAddress}`);
-
+    console.log(`\n🎉 SUCCESS! TestToken deployed to: ${tokenAddress}`);
+    
     // Deploy MockPriceFeed for ETH/USD
     console.log("\nDeploying MockPriceFeed...");
     const MockPriceFeed = await ethers.getContractFactory("MockPriceFeed");
@@ -43,55 +39,39 @@ async function main() {
       8 // Decimals
     );
     
-    const priceFeedTxHash = priceFeed.deploymentTransaction().hash;
-    console.log(`MockPriceFeed deployment transaction sent: ${priceFeedTxHash}`);
-    
     await priceFeed.waitForDeployment();
     const priceFeedAddress = await priceFeed.getAddress();
-    console.log(`MockPriceFeed deployed to: ${priceFeedAddress}`);
+    console.log(`\n🎉 SUCCESS! MockPriceFeed deployed to: ${priceFeedAddress}`);
     console.log(`Price set to: $${ethPrice} per ETH`);
     
-    // Now deploy LendingPool with the TestToken address and MockPriceFeed
+    // Deploy LendingPool
     console.log("\nDeploying LendingPool...");
     const LendingPool = await ethers.getContractFactory("contracts/LendingPool.sol:LendingPool");
-    
-    const lendingPool = await LendingPool.deploy(
-      tokenAddress,
-      priceFeedAddress
-    );
-    
-    const poolTxHash = lendingPool.deploymentTransaction().hash;
-    console.log(`LendingPool deployment transaction sent: ${poolTxHash}`);
+    const lendingPool = await LendingPool.deploy(tokenAddress, priceFeedAddress);
     
     await lendingPool.waitForDeployment();
     const lendingPoolAddress = await lendingPool.getAddress();
+    console.log(`\n🎉 SUCCESS! LendingPool deployed to: ${lendingPoolAddress}`);
     
-    console.log(`\n🎉 SUCCESS! Deployment completed:`);
-    console.log(`  - TestToken (USDC): ${tokenAddress}`);
-    console.log(`  - MockPriceFeed (ETH/USD): ${priceFeedAddress}`);
-    console.log(`  - LendingPool: ${lendingPoolAddress}`);
-    
-    // Mint some tokens to the deployer for testing
+    // Fund the first account with test tokens
+    console.log("\nFunding test account with USDC...");
     const mintAmount = ethers.parseUnits("10000", 6); // 10,000 USDC
-    console.log(`\nMinting ${ethers.formatUnits(mintAmount, 6)} USDC to deployer...`);
     await testToken.mint(deployer.address, mintAmount);
+    console.log(`Minted 10,000 USDC to ${deployer.address}`);
     
     // Save deployment info
     const fs = require("fs");
     const deploymentInfo = {
-      network: "hardhat",
+      network: "localhost",
       tokenContract: {
         address: tokenAddress,
-        transactionHash: tokenTxHash
       },
       priceFeedContract: {
         address: priceFeedAddress,
-        transactionHash: priceFeedTxHash,
         initialPrice: `$${ethPrice} per ETH`
       },
-      lendingPoolContract: {
+      lendingPool: {
         address: lendingPoolAddress,
-        transactionHash: poolTxHash
       },
       timestamp: new Date().toISOString(),
       chainId: Number(network.chainId)
@@ -103,7 +83,7 @@ async function main() {
     );
     
     console.log("\nDeployment information saved to local-deployment.json");
-    console.log("You can now update your frontend configuration with these addresses");
+    console.log("You can now add these tokens to MetaMask for testing");
     
     return deploymentInfo;
     
@@ -117,7 +97,7 @@ async function main() {
 // Run the deployment
 main()
   .then((deploymentInfo) => {
-    console.log("\nDeployment process completed successfully!");
+    console.log("\nDeployment complete!");
     process.exit(0);
   })
   .catch((error) => {

@@ -1,18 +1,15 @@
 {
-  "network": "hardhat",
+  "network": "localhost",
   "tokenContract": {
-    "address": "0x5FbDB2315678afecb367f032d93F642f64180aa3",
-    "transactionHash": "0x7e9b4cbcc4bb0a105956f84a58faa2d033f7b6eaa5c675e0a6e461299ea01446"
+    "address": "0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0"
   },
   "priceFeedContract": {
-    "address": "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512",
-    "transactionHash": "0x80b3ee05783000617cf694505f7d1e25a75ca708a4ee610ec090d2365fff4d25",
+    "address": "0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9",
     "initialPrice": "$2000 per ETH"
   },
-  "lendingPoolContract": {
-    "address": "0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0",
-    "transactionHash": "0x76792dbfea918f6be3833cb5125c022c9b82358b566786566df57c921d3ebe18"
+  "lendingPool": {
+    "address": "0xDc64a140Aa3E981100a9becA4E685f962f0cF6C9"
   },
-  "timestamp": "2025-05-12T04:25:01.101Z",
+  "timestamp": "2025-05-15T05:46:08.163Z",
   "chainId": 31337
 }
